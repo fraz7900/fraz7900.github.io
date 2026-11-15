@@ -139,8 +139,11 @@ test("command menu opens from the keyboard, selects a page and closes with Escap
   const trigger = page.getByRole("button", { name: /Jump to/ });
   const dialog = page.getByRole("dialog", { name: "Jump to a page" });
 
-  await page.keyboard.press("Control+k");
-  await expect(dialog).toBeVisible();
+  // The shortcut listener attaches after hydration; retry until the page is interactive.
+  await expect(async () => {
+    await page.keyboard.press("Control+k");
+    await expect(dialog).toBeVisible({ timeout: 500 });
+  }).toPass();
   await expect(page.getByRole("combobox", { name: "Search pages" })).toBeFocused();
 
   await page.keyboard.press("Escape");
