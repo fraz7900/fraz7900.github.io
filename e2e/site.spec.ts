@@ -8,6 +8,10 @@ const ROUTES = [
   { path: "/about/", title: /^About · Fraz Ahmed$/, heading: /Fraz Ahmed/ },
   { path: "/work/caretrak/", title: /^CareTrak case study · Fraz Ahmed$/, heading: /CareTrak/ },
   { path: "/work/pension-reform/", title: /^Pension reform case study · Fraz Ahmed$/, heading: /Pension reform/ },
+  { path: "/work/product-management/", title: /^Product management portfolio · Fraz Ahmed$/, heading: /Product management portfolio/ },
+  { path: "/work/public-finance/", title: /^Public finance · Fraz Ahmed$/, heading: /^Public finance$/ },
+  { path: "/work/research/", title: /^Research · Fraz Ahmed$/, heading: /^Research$/ },
+  { path: "/work/consulting/", title: /^Consulting · Fraz Ahmed$/, heading: /^Consulting$/ },
 ] as const;
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -99,15 +103,15 @@ test("every CareTrak walkthrough step passes axe and fits the viewport", async (
   }
 });
 
-test("homepage routes a first-time visitor to work and the calculator", async ({ page }) => {
+test("homepage routes employers to the product portfolio and everyone to all work", async ({ page }) => {
   await page.goto("/");
 
-  await page.getByRole("link", { name: /View selected work/ }).click();
+  await page.getByRole("link", { name: "See my product portfolio" }).click();
+  await expect(page).toHaveURL(/\/work\/product-management\/$/);
+
+  await page.goto("/");
+  await page.locator("#intro-heading").locator("..").getByRole("link", { name: "All work" }).click();
   await expect(page).toHaveURL(/\/work\/$/);
-
-  await page.goto("/");
-  await page.getByRole("link", { name: "Try the ROI calculator" }).click();
-  await expect(page).toHaveURL(/\/tools\/workflow-roi\/$/);
 });
 
 test("homepage preview shows the worked example and recalculates", async ({ page }) => {
@@ -217,7 +221,7 @@ test("command menu supports arrow keys and shows an empty state", async ({ page 
   await page.getByRole("button", { name: /Jump to/ }).click();
 
   await page.keyboard.press("ArrowDown");
-  await expect(page.getByRole("option", { selected: true })).toContainText("Work");
+  await expect(page.getByRole("option", { selected: true })).toContainText("Product");
 
   await page.keyboard.type("work");
   await page.keyboard.press("Home");
@@ -318,10 +322,53 @@ test("pension reform walkthrough shows sourced exhibits for every step", async (
   await expect(page.locator("#jamaica")).toContainText("174k");
 });
 
-test("work index lists every published case and hides the empty in-preparation section", async ({ page }) => {
+test("work index shows the five tracks with product management first", async ({ page }) => {
   await page.goto("/work/");
 
-  await expect(page.locator("main ol > li")).toHaveCount(3);
-  await expect(page.getByRole("link", { name: /Pension reform/ })).toHaveAttribute("href", "/work/pension-reform/");
-  await expect(page.getByRole("heading", { name: "in preparation" })).toHaveCount(0);
+  const tracks = page.locator("main ol > li h2 a");
+  await expect(tracks).toHaveCount(5);
+  await expect(tracks.first()).toHaveAttribute("href", "/work/product-management/");
+  await expect(tracks.nth(4)).toHaveAttribute("href", "/advising/");
+  await expect(page.locator("main")).toContainText("in preparation");
+});
+
+test("product portfolio: the hiring lens switches roles and every item names its source", async ({ page }) => {
+  await page.goto("/work/product-management/");
+  const lens = page.getByRole("tablist", { name: "What are you hiring for?" });
+  await expect(lens.getByRole("tab")).toHaveCount(3);
+
+  await lens.getByRole("tab", { name: "AI Product Manager" }).click();
+  const panel = page.locator('[role="tabpanel"]:not([hidden])').first();
+  await expect(panel).toContainText("Does this person know how to ship AI");
+  await expect(panel).toContainText("not LLMs");
+
+  await lens.getByRole("tab", { name: "AI Product Manager" }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(lens.getByRole("tab", { name: "Product strategy" })).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator('[role="tabpanel"]:not([hidden])').first().getByRole("link", { name: "see it" }).first()).toBeVisible();
+});
+
+test("product portfolio: the CareTrak canvas steps from problem to outcome by keyboard", async ({ page }) => {
+  await page.goto("/work/product-management/");
+  const canvas = page.getByRole("tablist", { name: /CareTrak product thinking/ });
+  await expect(canvas.getByRole("tab")).toHaveCount(6);
+  await canvas.getByRole("tab").first().focus();
+  await page.keyboard.press("End");
+  await expect(canvas.getByRole("tab").last()).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator('[role="tabpanel"]:not([hidden])').last()).toContainText("30% shorter implementation time");
+  await page.keyboard.press("Home");
+  await expect(page.locator('[role="tabpanel"]:not([hidden])').last()).toContainText("product thinking");
+});
+
+test("nav highlights Product on product case studies and Work on other tracks", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "desktop nav check");
+  const nav = page.getByRole("navigation", { name: "Primary" });
+  await page.goto("/work/caretrak/");
+  await expect(nav.getByRole("link", { name: "Product" })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Work" })).not.toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toContainText("product-management");
+
+  await page.goto("/work/research/");
+  await expect(nav.getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "page");
+  await expect(nav.getByRole("link", { name: "Product" })).not.toHaveAttribute("aria-current", "page");
 });

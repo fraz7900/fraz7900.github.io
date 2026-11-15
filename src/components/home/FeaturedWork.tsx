@@ -14,20 +14,20 @@ interface Feature {
 
 const FEATURES: readonly Feature[] = [
   {
-    mapId: "pension",
-    badges: ["Public finance", "Ministry of Finance · 2022–2025"],
-    title: "Pension reform at Pakistan’s Ministry of Finance",
-    summary:
-      "Revalued federal pension liabilities at PKR 12.0 trillion, co-drafted the pension commitments for the US$7 billion IMF Extended Fund Facility, and drafted the legal framework for a funded defined-contribution scheme run by licensed private fund managers.",
-    href: "/work/pension-reform/",
-  },
-  {
     mapId: "caretrak",
     badges: ["Case study", "Persivia · 2020–2022"],
     title: "CareTrak: clinical AI from integration to production",
     summary:
       "How an EHR-integrated, NLP-supported workflow reached production on a platform serving 50+ facilities: integration, data readiness, evaluation, clinician review and launch metrics.",
     href: "/work/caretrak/",
+  },
+  {
+    mapId: "pension",
+    badges: ["Public finance", "Ministry of Finance · 2022–2025"],
+    title: "Pension reform at Pakistan’s Ministry of Finance",
+    summary:
+      "Revalued federal pension liabilities at PKR 12.0 trillion, co-drafted the pension commitments for the US$7 billion IMF Extended Fund Facility, and drafted the legal framework for a funded defined-contribution scheme run by licensed private fund managers.",
+    href: "/work/pension-reform/",
   },
   {
     mapId: "roi",

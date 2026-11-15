@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useId } from "react";
+import { useEffect, useId, useState } from "react";
 import { UPDATE_TYPE_LABEL, type Update, type UpdateType } from "@/content/advising/updates";
 import { EMPTY_QUERY, browseUpdates, formatKeyDate, parseQuery, queryToParams, type UpdateQuery } from "@/lib/advising/updateStatus";
 import { useNow } from "./ClientUtils";
@@ -24,13 +24,21 @@ export function UpdatesExplorer({ updates, buildTimeMs }: { updates: readonly Up
   const params = useSearchParams();
   const now = useNow(buildTimeMs);
   const id = useId();
-  const query = parseQuery(new URLSearchParams(params.toString()));
+  // Local state is the source of truth; the URL mirrors it. Reading the URL on every change
+  // would race with Next's asynchronous router.replace and drop rapid successive edits.
+  const [query, setQuery] = useState<UpdateQuery>(() => parseQuery(new URLSearchParams(params.toString())));
+  useEffect(() => {
+    const target = queryToParams(query);
+    if (target !== queryToParams(parseQuery(new URLSearchParams(window.location.search)))) {
+      router.replace(`${pathname}${target}`, { scroll: false });
+    }
+  }, [query, pathname, router]);
   const results = browseUpdates(updates, query, now);
   const types = [...new Set(updates.map((u) => u.type))];
   const levels = [...new Set(updates.flatMap((u) => u.degreeLevels))];
   const isFiltered = queryToParams(query) !== "";
 
-  const set = (patch: Partial<UpdateQuery>) => router.replace(`${pathname}${queryToParams({ ...query, ...patch })}`, { scroll: false });
+  const set = (patch: Partial<UpdateQuery>) => setQuery((current) => ({ ...current, ...patch }));
 
   return (
     <div className="flex flex-col gap-6">
@@ -60,7 +68,7 @@ export function UpdatesExplorer({ updates, buildTimeMs }: { updates: readonly Up
           {results.length} of {updates.length} update{updates.length === 1 ? "" : "s"}
         </p>
         {isFiltered && (
-          <button type="button" onClick={() => router.replace(pathname + queryToParams(EMPTY_QUERY), { scroll: false })} className="link-accent">
+          <button type="button" onClick={() => setQuery(EMPTY_QUERY)} className="link-accent">
             Clear search and filters
           </button>
         )}

@@ -40,7 +40,7 @@ const VISUALS = [
 export default function PensionReformPage() {
   return (
     <article className="flex flex-col">
-      <CaseHeader crumb="pension-reform" title={PENSION_INTRO.title} lede={PENSION_INTRO.lede} facts={PENSION_CASE_FILE} />
+      <CaseHeader track={{ id: "public-finance", href: "/work/public-finance/" }} crumb="pension-reform" title={PENSION_INTRO.title} lede={PENSION_INTRO.lede} facts={PENSION_CASE_FILE} />
       <CaseSection id="problem" index="01" title="The problem">
         <ProblemStatement problem={PENSION_INTRO.problem} context={PENSION_INTRO.problemContext} />
       </CaseSection>

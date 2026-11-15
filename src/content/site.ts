@@ -12,6 +12,8 @@ export interface NavItem {
   readonly label: string;
   readonly description: string;
   readonly kind?: CommandKind;
+  /** Other path prefixes that should highlight this nav item (e.g. a track's case studies). */
+  readonly activeFor?: readonly string[];
 }
 
 export const SITE = {
@@ -79,16 +81,25 @@ export const SOCIAL_LINKS: readonly NavItem[] = [
 ];
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { href: "/work/", label: "Work", description: "Case studies and tools", kind: "go" },
-  { href: "/#map", label: "Strategy map", description: "How the work connects, as a live graph", kind: "go" },
   {
-    href: "/tools/workflow-roi/",
-    label: "ROI calculator",
-    description: "Estimate the monthly value of a workflow change",
-    kind: "tool",
+    href: "/work/product-management/",
+    label: "Product",
+    description: "Product management portfolio: PM, AI PM and product strategy",
+    kind: "go",
+    activeFor: ["/work/caretrak/", "/tools/workflow-roi/"],
   },
-  { href: "/about/", label: "About", description: "Healthcare SaaS, public finance and CMU", kind: "go" },
+  { href: "/work/", label: "Work", description: "All work: five tracks", kind: "go" },
+  { href: "/about/", label: "About", description: "Public finance, healthcare SaaS and CMU", kind: "go" },
   { href: "/advising/", label: "Advising", description: "One-to-one career, admissions and test-prep guidance", kind: "go" },
+];
+
+/** Portfolio destinations reachable from the command menu without crowding the top nav. */
+const PORTFOLIO_COMMANDS: readonly NavItem[] = [
+  { href: "/work/public-finance/", label: "Public finance work", description: "Pension reform, World Bank, export schemes", kind: "go" },
+  { href: "/work/research/", label: "Research", description: "Working papers and the pensionfisc toolkit", kind: "go" },
+  { href: "/work/consulting/", label: "Consulting", description: "Case studies in preparation", kind: "go" },
+  { href: "/#map", label: "Strategy map", description: "How the work connects, as a live graph", kind: "go" },
+  { href: "/tools/workflow-roi/", label: "ROI calculator", description: "Estimate the monthly value of a workflow change", kind: "tool" },
 ];
 
 /** Advising sub-pages: in the command menu, but kept out of the top-level navigation. */
@@ -107,6 +118,7 @@ export const HOME_ITEM: NavItem = { href: "/", label: "Home", description: "Intr
 export const COMMANDS: readonly NavItem[] = [
   HOME_ITEM,
   ...NAV_ITEMS,
+  ...PORTFOLIO_COMMANDS,
   {
     href: "/work/pension-reform/",
     label: "Pension reform case study",

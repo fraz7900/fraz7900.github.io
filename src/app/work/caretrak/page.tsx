@@ -28,7 +28,7 @@ const VISUALS = [
 export default function CareTrakPage() {
   return (
     <article className="flex flex-col">
-      <CaseHeader crumb="caretrak" title={INTRO.title} lede={INTRO.lede} facts={CASE_FILE} />
+      <CaseHeader track={{ id: "product-management", href: "/work/product-management/" }} crumb="caretrak" title={INTRO.title} lede={INTRO.lede} facts={CASE_FILE} />
       <CaseSection id="problem" index="01" title="The problem">
         <ProblemStatement problem={INTRO.problem} context={INTRO.problemContext} />
       </CaseSection>

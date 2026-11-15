@@ -1,54 +1,191 @@
 /**
- * Work index content. Only entries with `href` are public, inspectable work.
- * Entries in IN_PREPARATION are named without links until their content is verified.
+ * Work, organised into tracks. Sources: Fraz's CV (Assets/Fraz_Ahmed_CV_ADB_YPP.pdf) and the
+ * case studies on this site. Add new work by appending a WorkItem with the right `track`.
+ * Items without `href` are listed but have no page yet. Never add unverified work.
  */
 
-export interface WorkEntry {
+export type TrackId = "product-management" | "public-finance" | "consulting" | "research" | "guidance";
+
+export interface Track {
+  readonly id: TrackId;
   readonly title: string;
-  readonly kind: string;
-  /** The decision or problem the work addresses. */
-  readonly decision: string;
-  readonly role: string;
-  /** What a visitor can open and check. */
-  readonly inspect: string;
   readonly href: string;
+  readonly summary: string;
+  /** Who this track is most useful for. */
+  readonly forWhom: string;
 }
 
-export interface PlannedWork {
+export type WorkStatus = "case-study" | "tool" | "listed" | "in-development" | "service" | "working-paper";
+
+export const STATUS_LABEL: Record<WorkStatus, string> = {
+  "case-study": "Case study",
+  tool: "Live tool",
+  listed: "Summary",
+  "in-development": "In development",
+  service: "Service",
+  "working-paper": "Working paper",
+};
+
+export interface WorkItem {
+  readonly track: TrackId;
   readonly title: string;
-  readonly kind: string;
-  readonly decision: string;
+  readonly context: string;
+  readonly years?: string;
+  readonly summary: string;
+  readonly status: WorkStatus;
+  readonly href?: string;
 }
 
-export const PUBLISHED_WORK: readonly WorkEntry[] = [
+export const TRACKS: readonly Track[] = [
   {
-    title: "Pension reform: from an unfunded promise to a funded scheme",
-    kind: "Case study · Public finance · Ministry of Finance",
-    decision:
-      "How to reform a federal pension promise costing 14% of net revenue: revalue the liability, turn it into IMF programme rules, and build a funded defined-contribution scheme.",
-    role: "Section Officer, Regulations Wing, 2022–2025. Conducted the PKR 12.0tn revaluation, co-drafted the IMF EFF pension commitments and drafted the DC legal framework.",
-    inspect: "A five-step walkthrough with sourced exhibits, the Jamaica follow-on with the World Bank, trade-offs and lessons.",
-    href: "/work/pension-reform/",
+    id: "product-management",
+    title: "Product management",
+    href: "/work/product-management/",
+    summary: "Healthcare SaaS and clinical AI: taking an EHR-integrated NLP workflow from integration to production.",
+    forWhom: "Hiring for product manager, AI product manager or product strategy roles",
   },
   {
-    title: "CareTrak: clinical AI from integration to production",
-    kind: "Case study · Healthcare SaaS · Persivia",
-    decision:
-      "How to bring an EHR-integrated, AI-supported workflow into production on a platform serving 50+ facilities without letting data readiness, evaluation or performance slip.",
-    role: "Product Manager, 2020–2022. Led a team of 10 engineers and 3 QA analysts; led the operational launch, NLP evaluation criteria and operational analytics.",
-    inspect: "A five-step walkthrough with annotated product mockups, results, trade-offs and lessons.",
-    href: "/work/caretrak/",
+    id: "public-finance",
+    title: "Public finance",
+    href: "/work/public-finance/",
+    summary: "Pension reform at Pakistan’s Ministry of Finance, digital pension design with the World Bank, and export-competitiveness schemes.",
+    forWhom: "Public sector, development finance and policy roles",
   },
   {
-    title: "Workflow ROI calculator",
-    kind: "Tool",
-    decision: "Is a workflow change worth its recurring cost, and how much time must it save to break even?",
-    // Confirmed by Fraz (2026-11-14): he designed the model.
-    role: "Designed the model and built the tool.",
-    inspect: "Editable assumptions, the formula, a worked example and the break-even threshold.",
-    href: "/tools/workflow-roi/",
+    id: "consulting",
+    title: "Consulting",
+    href: "/work/consulting/",
+    summary: "Consulting case studies will be added here.",
+    forWhom: "Strategy and management consulting roles",
+  },
+  {
+    id: "research",
+    title: "Research",
+    href: "/work/research/",
+    summary: "Working papers on industrial policy, digital public infrastructure and trade, plus an open-source pension costing toolkit.",
+    forWhom: "Research, economics and data science roles",
+  },
+  {
+    id: "guidance",
+    title: "Career counselling and admissions/scholarship guidance",
+    href: "/advising/",
+    summary: "One-to-one career guidance, admissions and scholarship planning, and test-preparation planning.",
+    forWhom: "Students and professionals planning their next move",
   },
 ];
 
-/** Work named without links until it is ready. Empty lists hide the section. */
-export const IN_PREPARATION: readonly PlannedWork[] = [];
+export const WORK_ITEMS: readonly WorkItem[] = [
+  // Product management
+  {
+    track: "product-management",
+    title: "CareTrak: clinical AI from integration to production",
+    context: "Persivia · Healthcare SaaS",
+    years: "2020–2022",
+    summary: "Led a team of 10 engineers and 3 QA analysts and the operational launch of an EHR-integrated clinical NLP workflow on a platform serving 50+ facilities.",
+    status: "case-study",
+    href: "/work/caretrak/",
+  },
+  {
+    track: "product-management",
+    title: "Workflow ROI calculator",
+    context: "Product strategy tool",
+    years: "2026",
+    summary: "A break-even model for workflow investments that I designed and built.",
+    status: "tool",
+    href: "/tools/workflow-roi/",
+  },
+  // Public finance
+  {
+    track: "public-finance",
+    title: "Pension reform: from an unfunded promise to a funded scheme",
+    context: "Ministry of Finance, Pakistan",
+    years: "2022–2025",
+    summary: "Revalued federal pension liabilities at PKR 12.0 trillion, co-drafted the IMF EFF pension commitments and drafted the legal framework for a funded defined-contribution scheme.",
+    status: "case-study",
+    href: "/work/pension-reform/",
+  },
+  {
+    track: "public-finance",
+    title: "Jamaica digital pension-system design",
+    context: "World Bank, LAC Digital Development · independent research project",
+    years: "2025–2026",
+    summary: "Led the design extending pension coverage to informal workers through digital ID enrolment, data exchange and mobile payments; announced by the government in May 2026.",
+    status: "listed",
+    href: "/work/pension-reform/#jamaica",
+  },
+  {
+    track: "public-finance",
+    title: "Export-competitiveness schemes",
+    context: "Ministry of Finance, Pakistan",
+    years: "2022–2023",
+    summary: "Designed duty drawback and tax holiday schemes during the 2022–23 balance-of-payments crisis, identifying about 30% compliance-cost savings for 500+ exporters.",
+    status: "listed",
+  },
+  // Research
+  {
+    track: "research",
+    title: "Pricing Firms Back onto the Grid: A Staged Method for Evaluating Industrial Policy under Infrastructure Constraints",
+    context: "With A. A. Janjua and Z. Ahmad",
+    years: "2026",
+    summary: "Evaluates Pakistan’s 2025 Captive Power Levy with registry, meter and feeder data; finds 31.0% of licensed gas/RLNG capacity unclassified and shows that grid switching depends on reliable service and utility finances.",
+    status: "working-paper",
+  },
+  {
+    track: "research",
+    title: "From Turnkey Systems to Digital Public Infrastructure: A Comparative Analysis of Jamaica and Uruguay",
+    context: "With Yolanda Martínez, Practice Manager, Digital Development, World Bank",
+    summary: "A comparative analysis of how two governments moved from turnkey systems to digital public infrastructure.",
+    status: "working-paper",
+  },
+  {
+    track: "research",
+    title: "Causal Impact of Barter Trade Policy during a Foreign Exchange Crisis",
+    context: "With U. Sohail, University of Delaware",
+    summary: "A quasi-experimental evaluation of firm export behaviour under severe foreign-exchange constraints, using administrative microdata.",
+    status: "working-paper",
+  },
+  {
+    track: "research",
+    title: "pensionfisc: an open-source toolkit for costing pension reform",
+    context: "Python · public sources only",
+    years: "2026",
+    summary: "Every scheme rule stored with its legal citation and effective date, every figure backed by a test. Pre-release and not yet validated against outturns.",
+    status: "in-development",
+    href: "/work/pension-reform/#building-now",
+  },
+  // Guidance (lives in the Advising section)
+  {
+    track: "guidance",
+    title: "Career guidance",
+    context: "Advising",
+    summary: "Direction, transitions, CV and LinkedIn feedback, and interview preparation, with a reflection tool to prepare.",
+    status: "service",
+    href: "/advising/career/",
+  },
+  {
+    track: "guidance",
+    title: "Admissions and scholarship guidance",
+    context: "Advising",
+    summary: "Shortlists, statements, recommendations and scholarship planning, with a readiness checklist and source-checked guides.",
+    status: "service",
+    href: "/advising/admissions/",
+  },
+  {
+    track: "guidance",
+    title: "Test preparation planning",
+    context: "Advising",
+    summary: "A week-by-week study plan builder and practical preparation support.",
+    status: "service",
+    href: "/advising/test-prep/",
+  },
+];
+
+export function itemsFor(track: TrackId): readonly WorkItem[] {
+  return WORK_ITEMS.filter((item) => item.track === track);
+}
+
+export function trackById(id: TrackId): Track {
+  const track = TRACKS.find((t) => t.id === id);
+  if (!track) throw new Error(`Unknown track ${id}`);
+  return track;
+}

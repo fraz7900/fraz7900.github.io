@@ -1,8 +1,13 @@
 import { describe, expect, test } from "vitest";
-import { HOME_ITEM, NAV_ITEMS } from "@/content/site";
+import { COMMANDS, type NavItem } from "@/content/site";
 import { searchPages } from "./searchPages";
 
-const PAGES = [HOME_ITEM, ...NAV_ITEMS];
+/** Fixed fixture so these tests check the ranking rules, not the current site navigation. */
+const PAGES: readonly NavItem[] = [
+  { href: "/", label: "Home", description: "Introduction" },
+  { href: "/a/", label: "About", description: "Who I am" },
+  { href: "/r/", label: "ROI calculator", description: "Estimate value" },
+];
 const labels = (query: string) => searchPages(PAGES, query).map((page) => page.label);
 
 describe("searchPages", () => {
@@ -20,5 +25,11 @@ describe("searchPages", () => {
 
   test("returns nothing when no page matches", () => {
     expect(labels("zzz")).toEqual([]);
+  });
+
+  test("the live command list has unique destinations and finds the product portfolio", () => {
+    const hrefs = COMMANDS.map((command) => command.href);
+    expect(new Set(hrefs).size).toBe(hrefs.length);
+    expect(searchPages(COMMANDS, "product")[0].href).toBe("/work/product-management/");
   });
 });

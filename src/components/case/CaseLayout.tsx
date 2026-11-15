@@ -4,11 +4,13 @@ import Link from "next/link";
 
 export function CaseHeader({
   crumb,
+  track,
   title,
   lede,
   facts,
 }: {
   crumb: string;
+  track: { readonly id: string; readonly href: string };
   title: string;
   lede: string;
   facts: readonly { readonly term: string; readonly detail: string }[];
@@ -19,6 +21,10 @@ export function CaseHeader({
         <nav aria-label="Breadcrumb" className="font-mono text-xs text-muted">
           <Link href="/work/" className="hover:text-accent">
             ~/work
+          </Link>
+          <span aria-hidden="true"> / </span>
+          <Link href={track.href} className="hover:text-accent">
+            {track.id}
           </Link>
           <span aria-hidden="true"> / </span>
           <span aria-current="page" className="text-accent">

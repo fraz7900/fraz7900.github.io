@@ -39,11 +39,11 @@ function Hero() {
         <TypingLine phrases={TAGLINES} />
         <p className="max-w-xl text-lg leading-relaxed text-muted">{SITE.headline}</p>
         <div className="flex flex-wrap items-center gap-3 pt-2">
-          <Link href="/work/" className="btn-primary">
-            View selected work
+          <Link href="/work/product-management/" className="btn-primary">
+            See my product portfolio
           </Link>
-          <Link href="/tools/workflow-roi/" className="btn-ghost">
-            Try the ROI calculator
+          <Link href="/work/" className="btn-ghost">
+            All work
           </Link>
           {SITE.resumeHref && (
             <a href={SITE.resumeHref} className="btn-ghost">
