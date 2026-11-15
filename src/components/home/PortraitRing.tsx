@@ -1,7 +1,6 @@
-import Image from "next/image";
-import { SITE } from "@/content/site";
+import { PortraitVector } from "./PortraitVector";
 
-/** Headshot in a gradient ring with viewfinder corners. Shows a monogram until a headshot is approved. */
+/** The vector portrait in a gradient ring with viewfinder corners. */
 export function PortraitRing() {
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[22rem] p-6">
@@ -11,17 +10,8 @@ export function PortraitRing() {
         ),
       )}
       <div className="relative size-full rounded-full bg-[conic-gradient(from_200deg,var(--color-accent),var(--color-sky),var(--color-amber),var(--color-accent))] p-[3px] shadow-[0_0_60px_-10px] shadow-accent/50">
-        <div className="flex size-full items-center justify-center overflow-hidden rounded-full bg-card">
-          {SITE.headshotSrc ? (
-            <Image src={SITE.headshotSrc} alt={`Portrait of ${SITE.name}`} width={320} height={320} className="size-full object-cover" unoptimized />
-          ) : (
-            <div data-to-confirm="headshot" className="flex flex-col items-center gap-2 text-center">
-              <span className="font-display text-7xl font-semibold text-gradient">FA</span>
-              <span className="rounded border border-dashed border-amber/60 px-2 py-0.5 font-mono text-[0.65rem] text-amber">
-                headshot to confirm
-              </span>
-            </div>
-          )}
+        <div className="size-full overflow-hidden rounded-full bg-card">
+          <PortraitVector />
         </div>
       </div>
       <p className="absolute inset-x-0 -bottom-2 mx-auto w-max rounded-full border border-line-strong bg-paper/90 px-3 py-1 font-mono text-[0.65rem] tracking-[0.14em] text-muted">

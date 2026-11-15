@@ -127,6 +127,12 @@ export const COMMANDS: readonly NavItem[] = [
     kind: "case",
   },
   {
+    href: "/work/product-management/ehr-interoperability/",
+    label: "EHR interoperability case study",
+    description: "Persivia: closing EHR gaps across 50+ health systems",
+    kind: "case",
+  },
+  {
     href: "/work/caretrak/",
     label: "CareTrak case study",
     description: "Clinical AI from integration to production",

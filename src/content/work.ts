@@ -78,6 +78,15 @@ export const WORK_ITEMS: readonly WorkItem[] = [
   // Product management
   {
     track: "product-management",
+    title: "Closing EHR interoperability gaps across 50+ health systems",
+    context: "Persivia · Healthcare SaaS",
+    years: "2020–2022",
+    summary: "Led 10 engineers and 3 QA analysts to close EHR interoperability gaps with an API-first architecture; implementation time fell by a reported 30%.",
+    status: "case-study",
+    href: "/work/product-management/ehr-interoperability/",
+  },
+  {
+    track: "product-management",
     title: "CareTrak: clinical AI from integration to production",
     context: "Persivia · Healthcare SaaS",
     years: "2020–2022",

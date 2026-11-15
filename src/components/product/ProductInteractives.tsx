@@ -1,43 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { CARETRAK_CANVAS, HIRING_LENSES, SOURCE_NOTE, type Evidence, type EvidenceSource } from "@/content/product";
+import { CARETRAK_CANVAS, HIRING_LENSES } from "@/content/product";
+import { EvidenceRow } from "./Evidence";
 import { Tabs } from "./Tabs";
-
-const SOURCE_STYLE: Record<EvidenceSource, string> = {
-  CV: "border-accent/60 text-accent",
-  "Case study": "border-sky/60 text-sky",
-  "Reported metric": "border-amber/60 text-amber",
-  Retrospective: "border-line-strong text-muted",
-  "Live tool": "border-accent/60 text-accent",
-  Coursework: "border-sky/60 text-sky",
-};
-
-function SourceTag({ source }: { source: EvidenceSource }) {
-  return (
-    <span title={SOURCE_NOTE[source]} className={`w-max shrink-0 rounded border px-1.5 py-0.5 text-center font-mono text-[0.65rem] sm:w-24 ${SOURCE_STYLE[source]}`}>
-      {source}
-      <span className="sr-only">: {SOURCE_NOTE[source]}</span>
-    </span>
-  );
-}
-
-function EvidenceRow({ item }: { item: Evidence }) {
-  return (
-    <li className="flex flex-col gap-1.5 border-b border-line py-3.5 last:border-0 sm:flex-row sm:items-start sm:gap-4">
-      <SourceTag source={item.source} />
-      <div className="min-w-0 flex-1">
-        <p className="font-medium text-ink">{item.claim}</p>
-        <p className="mt-0.5 text-sm leading-relaxed text-muted">{item.detail}</p>
-      </div>
-      {item.href && (
-        <Link href={item.href} className="shrink-0 font-mono text-xs text-accent hover:underline">
-          see it
-        </Link>
-      )}
-    </li>
-  );
-}
 
 /** "What are you hiring for?" One role lens at a time, each with sourced evidence. */
 export function HiringLensExplorer() {

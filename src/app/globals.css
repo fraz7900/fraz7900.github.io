@@ -331,3 +331,55 @@ body.cursor-down .cursor-ring {
     opacity: 0;
   }
 }
+
+/*
+ * Vector portrait (home). Tones build up darkest first on load; the lights drift; the figure and the
+ * lights shift with the pointer at different depths (--px/--py come from PortraitMotion).
+ */
+.portrait-figure,
+.portrait-lights {
+  transition: translate 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.portrait-figure {
+  translate: calc(var(--px, 0) * 7px) calc(var(--py, 0) * 5px);
+}
+
+.portrait-lights {
+  translate: calc(var(--px, 0) * -16px) calc(var(--py, 0) * -11px);
+  mix-blend-mode: screen; /* lights add to the dark ground instead of muddying it */
+}
+
+.portrait-tone {
+  animation: portrait-tone-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 120ms + 120ms);
+}
+
+.portrait-light {
+  opacity: var(--o);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: portrait-drift var(--dur, 12s) ease-in-out infinite alternate;
+}
+
+@keyframes portrait-tone-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes portrait-drift {
+  to {
+    translate: var(--dx, 0) var(--dy, 0);
+    scale: 1.15;
+    opacity: calc(var(--o) * 0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-tone,
+  .portrait-light {
+    animation: none;
+  }
+}

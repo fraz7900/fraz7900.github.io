@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Shared building blocks for case-study pages (CareTrak, pension reform). */
+/** Shared building blocks for case-study pages (CareTrak, EHR interoperability, pension reform, Wabtec). */
 
 export function CaseHeader({
   crumb,
@@ -8,12 +8,14 @@ export function CaseHeader({
   title,
   lede,
   facts,
+  cta = { href: "#walkthrough", label: "Start the walkthrough" },
 }: {
   crumb: string;
   track: { readonly id: string; readonly href: string };
   title: string;
   lede: string;
   facts: readonly { readonly term: string; readonly detail: string }[];
+  cta?: { readonly href: string; readonly label: string };
 }) {
   return (
     <header className="page-container grid grid-cols-[minmax(0,1fr)] gap-10 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:gap-16">
@@ -34,8 +36,8 @@ export function CaseHeader({
         <h1 className="font-display text-4xl font-semibold leading-[1.08] tracking-tight text-ink sm:text-6xl">{title}</h1>
         <p className="prose-body text-lg text-ink/85">{lede}</p>
         <p>
-          <a href="#walkthrough" className="btn-primary">
-            Start the walkthrough
+          <a href={cta.href} className="btn-primary">
+            {cta.label}
           </a>
         </p>
       </div>

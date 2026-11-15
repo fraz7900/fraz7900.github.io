@@ -9,6 +9,11 @@ const ROUTES = [
   { path: "/work/caretrak/", title: /^CareTrak case study · Fraz Ahmed$/, heading: /CareTrak/ },
   { path: "/work/pension-reform/", title: /^Pension reform case study · Fraz Ahmed$/, heading: /Pension reform/ },
   { path: "/work/product-management/", title: /^Product management portfolio · Fraz Ahmed$/, heading: /Product management portfolio/ },
+  {
+    path: "/work/product-management/ehr-interoperability/",
+    title: /^EHR interoperability case study · Fraz Ahmed$/,
+    heading: /^Closing EHR interoperability gaps across 50\+ health systems$/,
+  },
   { path: "/work/public-finance/", title: /^Public finance · Fraz Ahmed$/, heading: /^Public finance$/ },
   { path: "/work/research/", title: /^Research · Fraz Ahmed$/, heading: /^Research$/ },
   { path: "/work/consulting/", title: /^Consulting · Fraz Ahmed$/, heading: /^Consulting$/ },
@@ -361,6 +366,60 @@ test("product portfolio: the CareTrak canvas steps from problem to outcome by ke
   await expect(page.locator('[role="tabpanel"]:not([hidden])').last()).toContainText("product thinking");
 });
 
+test("product portfolio: the Persivia case leads the tab and opens from the keyboard", async ({ page }) => {
+  await page.goto("/work/product-management/");
+  await expect(page.locator("main section[aria-labelledby] h2").first()).toHaveText("Healthcare SaaS at Persivia");
+
+  const feature = page.getByRole("article", { name: /Closing EHR interoperability gaps/ });
+  for (const label of ["Problem", "My role", "Decision", "Delivered", "Result"]) {
+    await expect(feature.locator("dt", { hasText: new RegExp(`^${label}$`) })).toBeVisible();
+  }
+  await expect(feature).toContainText("Reported metric");
+  await expect(feature).toContainText("10 software engineers and 3 QA analysts");
+
+  const open = feature.getByRole("link", { name: "Read the full case" });
+  await open.focus();
+  await expect(open).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/work\/product-management\/ehr-interoperability\/$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("EHR interoperability");
+});
+
+test("EHR case: detailed read runs in order, with a labelled recreation and sourced facts", async ({ page }) => {
+  await page.goto("/work/product-management/ehr-interoperability/");
+  await expect(page.locator("main section h2")).toHaveText([
+    "The quick version",
+    "The original workflow",
+    "How we found the problem",
+    "The options and the trade-off",
+    "The decision I owned",
+    "Working with engineering, QA and implementation",
+    "What happened after delivery",
+  ]);
+  await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toContainText("product-management");
+  await expect(page.locator("figure figcaption")).toContainText("Recreated diagram");
+  await expect(page.getByRole("list", { name: "before: flat files" }).locator("li")).toHaveCount(3);
+  await expect(page.getByRole("list", { name: "after: API-first" }).locator("li")).toHaveCount(5);
+  const sourceLinks = page.getByRole("link", { name: /read the source/ });
+  expect(await sourceLinks.count()).toBeGreaterThan(0);
+  for (const link of await sourceLinks.all()) {
+    await expect(link).toHaveAttribute("href", /^https:\/\/(www\.)?(persivia|prnewswire)\.com\//);
+  }
+
+  await page.getByRole("link", { name: "Start with the quick version" }).click();
+  await expect(page).toHaveURL(/#at-a-glance$/);
+  await expect(page.getByRole("link", { name: "Back to product management" })).toHaveAttribute("href", "/work/product-management/");
+});
+
+test("EHR case: anything unconfirmed is visibly marked and carries the publish-blocking marker", async ({ page }) => {
+  await page.goto("/work/product-management/ehr-interoperability/");
+  const pendingNotes = page.locator("[data-to-confirm^='ehr-']:not([data-to-confirm='ehr-draft'])");
+  const draftBanner = page.locator("[data-to-confirm='ehr-draft']");
+  for (const note of await pendingNotes.all()) await expect(note).toContainText("to confirm");
+  if ((await pendingNotes.count()) > 0) await expect(draftBanner).toContainText("Deploys are blocked");
+  else await expect(draftBanner).toHaveCount(0);
+});
+
 test("nav highlights Product on product case studies and Work on other tracks", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "desktop nav check");
   const nav = page.getByRole("navigation", { name: "Primary" });
@@ -368,6 +427,9 @@ test("nav highlights Product on product case studies and Work on other tracks", 
   await expect(nav.getByRole("link", { name: "Product" })).toHaveAttribute("aria-current", "page");
   await expect(nav.getByRole("link", { name: "Work" })).not.toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toContainText("product-management");
+
+  await page.goto("/work/product-management/ehr-interoperability/");
+  await expect(nav.getByRole("link", { name: "Product" })).toHaveAttribute("aria-current", "page");
 
   await page.goto("/work/research/");
   await expect(nav.getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "page");

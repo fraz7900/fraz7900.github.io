@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionLabel } from "@/components/SectionLabel";
+import { EhrFeature } from "@/components/product/EhrCase";
 import { HiringLensExplorer, ProductCanvas } from "@/components/product/ProductInteractives";
 import { PRODUCT_FACTS, PRODUCT_INTRO, PRODUCT_TOOLKIT, PRODUCT_WORK, SOURCE_NOTE, type EvidenceSource } from "@/content/product";
 import { SITE, SOCIAL_LINKS } from "@/content/site";
@@ -70,7 +71,15 @@ export default function ProductManagementPage() {
         </dl>
       </header>
 
-      <Block id="hiring-lens" index="01" title="What are you hiring for?">
+      <Block id="healthcare-saas" index="01" title="Healthcare SaaS at Persivia">
+        <p className="mb-6 max-w-2xl leading-relaxed text-muted">
+          From 2020 to 2022 I was the product manager for CareTrak, Persivia’s population health and value-based care platform. Start
+          with the case below; the CareTrak walkthrough covers the launch that followed.
+        </p>
+        <EhrFeature />
+      </Block>
+
+      <Block id="hiring-lens" index="02" title="What are you hiring for?">
         <p className="mb-6 max-w-2xl leading-relaxed text-muted">
           Pick the role you’re hiring for. Each item is tagged with where it comes from, so you can tell documented facts
           from my own reading of the work.
@@ -85,7 +94,7 @@ export default function ProductManagementPage() {
         </ul>
       </Block>
 
-      <Block id="product-thinking" index="02" title="How I approached CareTrak as a product">
+      <Block id="product-thinking" index="03" title="How I approached CareTrak as a product">
         <p className="mb-6 max-w-2xl leading-relaxed text-muted">
           The problem, the people, the constraints, the bets I made, how we measured them, and what happened. Step through
           it, or read the{" "}
@@ -97,7 +106,7 @@ export default function ProductManagementPage() {
         <ProductCanvas />
       </Block>
 
-      <Block id="product-work" index="03" title="Product work">
+      <Block id="product-work" index="04" title="Product work">
         <ol className="grid grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2">
           {PRODUCT_WORK.map((work) => (
             <li key={work.title} className="glass group relative flex flex-col gap-3 rounded-xl p-5 transition-colors hover:border-accent/60 sm:p-6">
@@ -118,7 +127,7 @@ export default function ProductManagementPage() {
         </ol>
       </Block>
 
-      <Block id="toolkit" index="04" title="Toolkit">
+      <Block id="toolkit" index="05" title="Toolkit">
         <ul className="flex flex-wrap gap-2">
           {PRODUCT_TOOLKIT.map((skill) => (
             <li key={skill} className="rounded-full border border-line-strong px-3 py-1.5 text-sm text-ink/90">

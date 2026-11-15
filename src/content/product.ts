@@ -4,7 +4,7 @@
  * Every evidence item names its source so employers can tell facts from interpretation.
  */
 
-export type EvidenceSource = "CV" | "Case study" | "Reported metric" | "Retrospective" | "Live tool" | "Coursework";
+export type EvidenceSource = "CV" | "Case study" | "Reported metric" | "Retrospective" | "Live tool" | "Coursework" | "My account" | "Public record";
 
 export const SOURCE_NOTE: Record<EvidenceSource, string> = {
   CV: "Stated in my CV",
@@ -13,6 +13,8 @@ export const SOURCE_NOTE: Record<EvidenceSource, string> = {
   Retrospective: "My reading of the work, looking back",
   "Live tool": "Something you can use on this site",
   Coursework: "Current graduate coursework",
+  "My account": "My own account of the work, with no document I can show",
+  "Public record": "Published by Persivia or in a press release, linked from the statement",
 };
 
 export interface Evidence {
@@ -247,6 +249,14 @@ export interface ProductWork {
 }
 
 export const PRODUCT_WORK: readonly ProductWork[] = [
+  {
+    title: "Closing EHR interoperability gaps across 50+ health systems",
+    kind: "Case study · Healthcare SaaS · Persivia",
+    years: "2020–2022",
+    summary: "The integration work behind CareTrak: the team I led, the API-first architecture, and a reported 30% cut in implementation time.",
+    href: "/work/product-management/ehr-interoperability/",
+    cta: "Read the case",
+  },
   {
     title: "CareTrak: clinical AI from integration to production",
     kind: "Case study · Healthcare SaaS · Persivia",
