@@ -97,6 +97,12 @@ export const COMMANDS: readonly NavItem[] = [
   HOME_ITEM,
   ...NAV_ITEMS,
   {
+    href: "/work/pension-reform/",
+    label: "Pension reform case study",
+    description: "Ministry of Finance: revaluation, IMF commitments, funded DC scheme",
+    kind: "case",
+  },
+  {
     href: "/work/caretrak/",
     label: "CareTrak case study",
     description: "Clinical AI from integration to production",

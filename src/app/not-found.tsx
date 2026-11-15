@@ -8,8 +8,8 @@ export default function NotFound() {
   return (
     <div className="page-container flex flex-col gap-4 py-16">
       <SectionLabel>404</SectionLabel>
-      <h1 className="font-display text-5xl text-ink">Page not found</h1>
-      <p className="text-ink/85">That address doesn’t match a page on this site.</p>
+      <h1 className="font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">Page not found</h1>
+      <p className="text-muted">That address doesn’t match a page on this site.</p>
       <p>
         <Link href="/" className="link-accent">
           Go to the homepage

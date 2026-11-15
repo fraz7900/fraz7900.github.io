@@ -34,7 +34,7 @@ export default function WorkflowRoiPage() {
     <div className="page-container flex flex-col gap-12 py-12 sm:py-16">
       <header className="flex max-w-2xl flex-col gap-4">
         <SectionLabel>Tool</SectionLabel>
-        <h1 className="font-display text-5xl text-ink">Workflow ROI calculator</h1>
+        <h1 className="font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">Workflow ROI calculator</h1>
         <p className="text-lg leading-relaxed text-ink/85">
           Before a team commits to a new workflow, it helps to know how much staff time the change has
           to save to pay for itself. Change any assumption to see the monthly value and the break-even
@@ -46,8 +46,8 @@ export default function WorkflowRoiPage() {
         aria-labelledby="calculator-heading"
         className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
       >
-        <div className="rounded-lg border border-line bg-card p-5 sm:p-6">
-          <h2 id="calculator-heading" className="mb-5 font-display text-2xl text-ink">
+        <div className="glass rounded-xl p-5 sm:p-6">
+          <h2 id="calculator-heading" className="mb-5 font-display text-2xl font-semibold text-ink">
             Assumptions
           </h2>
           <RoiCalculator editable={ALL_FIELDS} />
@@ -101,7 +101,7 @@ export default function WorkflowRoiPage() {
           {formatUsd(example.monthlyCostUsd)} recurring monthly cost. These are the calculator’s
           starting values.
         </p>
-        <ol className="flex flex-col gap-2 rounded-lg border border-line bg-card p-5 font-mono text-sm leading-relaxed text-ink">
+        <ol className="glass flex flex-col gap-2 rounded-xl p-5 font-mono text-sm leading-relaxed text-ink">
           <li>
             Gross: {example.monthlyCases} × {example.adoptionPercent / 100} × {example.minutesSavedPerCase} ÷
             60 × {example.hourlyCostUsd} = <strong>{formatUsd(exampleResult.grossMonthlyValue)}</strong>

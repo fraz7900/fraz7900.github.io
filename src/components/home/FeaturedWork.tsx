@@ -14,6 +14,14 @@ interface Feature {
 
 const FEATURES: readonly Feature[] = [
   {
+    mapId: "pension",
+    badges: ["Public finance", "Ministry of Finance · 2022–2025"],
+    title: "Pension reform at Pakistan’s Ministry of Finance",
+    summary:
+      "Revalued federal pension liabilities at PKR 12.0 trillion, co-drafted the pension commitments for the US$7 billion IMF Extended Fund Facility, and drafted the legal framework for a funded defined-contribution scheme run by licensed private fund managers.",
+    href: "/work/pension-reform/",
+  },
+  {
     mapId: "caretrak",
     badges: ["Case study", "Persivia · 2020–2022"],
     title: "CareTrak: clinical AI from integration to production",
@@ -27,14 +35,6 @@ const FEATURES: readonly Feature[] = [
     title: "Workflow ROI calculator",
     summary: "A break-even model for workflow changes: how much time a change must save before it pays for its recurring cost.",
     href: "/tools/workflow-roi/",
-  },
-  {
-    mapId: "pension",
-    badges: ["Public finance", "Ministry of Finance · 2022–2025"],
-    title: "Pension reform at Pakistan’s Ministry of Finance",
-    summary:
-      "Revalued federal pension liabilities at PKR 12.0 trillion, co-drafted the pension commitments for the US$7 billion IMF Extended Fund Facility, and drafted the legal framework for a funded defined-contribution scheme run by licensed private fund managers.",
-    status: "Full case study coming soon",
   },
 ];
 

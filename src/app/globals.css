@@ -9,7 +9,7 @@
   --color-card: #0c1524; /* raised surfaces */
   --color-ink: #e6edf5; /* primary text */
   --color-muted: #9aa8ba;
-  --color-faint: #6f7d92;
+  --color-faint: #7a889d; /* ≥5:1 on page and card surfaces */
   --color-line: #1f2d42;
   --color-line-strong: #33465f;
   --color-accent: #36d1bb; /* teal */

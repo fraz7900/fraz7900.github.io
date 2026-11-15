@@ -22,6 +22,15 @@ export interface PlannedWork {
 
 export const PUBLISHED_WORK: readonly WorkEntry[] = [
   {
+    title: "Pension reform: from an unfunded promise to a funded scheme",
+    kind: "Case study · Public finance · Ministry of Finance",
+    decision:
+      "How to reform a federal pension promise costing 14% of net revenue: revalue the liability, turn it into IMF programme rules, and build a funded defined-contribution scheme.",
+    role: "Section Officer, Regulations Wing, 2022–2025. Conducted the PKR 12.0tn revaluation, co-drafted the IMF EFF pension commitments and drafted the DC legal framework.",
+    inspect: "A five-step walkthrough with sourced exhibits, the Jamaica follow-on with the World Bank, trade-offs and lessons.",
+    href: "/work/pension-reform/",
+  },
+  {
     title: "CareTrak: clinical AI from integration to production",
     kind: "Case study · Healthcare SaaS · Persivia",
     decision:
@@ -41,17 +50,5 @@ export const PUBLISHED_WORK: readonly WorkEntry[] = [
   },
 ];
 
-export const IN_PREPARATION: readonly PlannedWork[] = [
-  {
-    title: "Pension reform at Pakistan’s Ministry of Finance",
-    kind: "Case study · Public finance",
-    decision:
-      "Moving federal pensions from an unfunded defined-benefit scheme toward a funded defined-contribution scheme: the PKR 12.0 trillion revaluation, the IMF EFF pension commitments and the DC legal framework.",
-  },
-  {
-    title: "Jamaica digital pension-system design",
-    kind: "Research · World Bank",
-    decision:
-      "Extending pension coverage to 174,000 informal workers through digital ID enrolment, data exchange, mobile payments, auto-enrolment and micro-pensions.",
-  },
-];
+/** Work named without links until it is ready. Empty lists hide the section. */
+export const IN_PREPARATION: readonly PlannedWork[] = [];

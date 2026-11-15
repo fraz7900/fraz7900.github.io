@@ -6,12 +6,16 @@ interface SectionLabelProps {
   readonly id?: string;
 }
 
-/** Small monospace eyebrow used to give every section the same technical accent. */
+/** Terminal-style eyebrow (`01 // formula`) matching the homepage section headings. */
 export function SectionLabel({ index, children, as: Tag = "p", id }: SectionLabelProps) {
   return (
-    <Tag id={id} className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-      {index && <span className="text-muted">{index} · </span>}
-      {children}
+    <Tag id={id} className="eyebrow flex items-center gap-3 lowercase">
+      <span aria-hidden="true" className="h-px w-8 bg-accent/70" />
+      <span>
+        {index && <span className="text-faint">{index} </span>}
+        {"// "}
+        {children}
+      </span>
     </Tag>
   );
 }

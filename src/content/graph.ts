@@ -22,8 +22,8 @@ export const GRAPH_TYPES: readonly { readonly type: GraphNodeType; readonly labe
 export const GRAPH_NODES: readonly GraphNode[] = [
   { id: "caretrak", label: "CareTrak case study", type: "work", href: "/work/caretrak/" },
   { id: "roi", label: "Workflow ROI calculator", type: "work", href: "/tools/workflow-roi/" },
-  { id: "pension", label: "Pension reform (MoF)", type: "work" },
-  { id: "jamaica", label: "Jamaica pension design", type: "work" },
+  { id: "pension", label: "Pension reform (MoF)", type: "work", href: "/work/pension-reform/" },
+  { id: "jamaica", label: "Jamaica pension design", type: "work", href: "/work/pension-reform/#jamaica" },
   { id: "pensionfisc", label: "pensionfisc costing toolkit", type: "work" },
 
   { id: "healthcare", label: "Healthcare SaaS", type: "domain" },

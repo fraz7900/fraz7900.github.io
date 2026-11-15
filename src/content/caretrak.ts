@@ -5,23 +5,9 @@
  * Mockups are original illustrations with synthetic data, not Persivia screenshots.
  */
 
-export type MockupKey = "integration" | "readiness" | "evaluation" | "review" | "operations";
+import type { WalkthroughStep } from "./walkthrough";
 
-export interface WalkthroughNote {
-  readonly pin: number;
-  readonly text: string;
-}
-
-export interface WalkthroughStep {
-  readonly id: string;
-  readonly title: string;
-  readonly summary: string;
-  readonly myWork: readonly string[];
-  readonly whyItMatters: string;
-  readonly mockup: MockupKey;
-  readonly mockupLabel: string;
-  readonly notes: readonly WalkthroughNote[];
-}
+export type { WalkthroughNote, WalkthroughStep } from "./walkthrough";
 
 export const CASE_FILE = [
   { term: "Role", detail: "Product Manager, CareTrak population health and value-based care platform" },
@@ -53,7 +39,6 @@ export const STEPS: readonly WalkthroughStep[] = [
     ],
     whyItMatters:
       "Every later step depends on this one. A repeatable integration pattern is what makes adding the next facility cohort a project rather than a rebuild.",
-    mockup: "integration",
     mockupLabel: "Integration flow, illustrative",
     notes: [
       { pin: 1, text: "Each source system connects through the same API layer instead of a one-off interface." },
@@ -71,7 +56,6 @@ export const STEPS: readonly WalkthroughStep[] = [
     ],
     whyItMatters:
       "Without shared definitions, a cohort can look ready to engineering and not ready to clinicians. One definition per metric, with an owner, turns that argument into a checklist.",
-    mockup: "readiness",
     mockupLabel: "Cohort readiness tracker, illustrative",
     notes: [
       { pin: 1, text: "Each cohort moves through the same milestones, so readiness is comparable across facilities." },
@@ -89,7 +73,6 @@ export const STEPS: readonly WalkthroughStep[] = [
     ],
     whyItMatters:
       "A note that mentions a condition isn’t the same as a documented diagnosis. Evaluation has to test the cases that fool a model, like negation and history, against the task clinicians actually do.",
-    mockup: "evaluation",
     mockupLabel: "Evaluation scorecard, illustrative",
     notes: [
       { pin: 1, text: "The test set is built to include the hard cases, not just typical notes." },
@@ -107,7 +90,6 @@ export const STEPS: readonly WalkthroughStep[] = [
     ],
     whyItMatters:
       "The output is a candidate, not a code. Showing the supporting text next to each candidate, and making uncertain ones visible, keeps the decision with the person accountable for documentation.",
-    mockup: "review",
     mockupLabel: "Coding review workspace, illustrative",
     notes: [
       { pin: 1, text: "Candidates arrive as a review queue, not as codes written into the record." },
@@ -127,7 +109,6 @@ export const STEPS: readonly WalkthroughStep[] = [
     ],
     whyItMatters:
       "Quality, reliability and use each tell part of the story. Putting them in one view lets a release review ask one question: is this cohort working, for clinicians and for the system?",
-    mockup: "operations",
     mockupLabel: "Operations dashboard, illustrative",
     notes: [
       { pin: 1, text: "Clinical quality, system reliability and workflow adoption sit side by side." },

@@ -7,6 +7,7 @@ const ROUTES = [
   { path: "/tools/workflow-roi/", title: /^Workflow ROI calculator · Fraz Ahmed$/, heading: /Workflow ROI calculator/ },
   { path: "/about/", title: /^About · Fraz Ahmed$/, heading: /Fraz Ahmed/ },
   { path: "/work/caretrak/", title: /^CareTrak case study · Fraz Ahmed$/, heading: /CareTrak/ },
+  { path: "/work/pension-reform/", title: /^Pension reform case study · Fraz Ahmed$/, heading: /Pension reform/ },
 ] as const;
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -293,4 +294,34 @@ test.describe("with reduced motion", () => {
     await expect(page.locator("#about dd").first()).toHaveText("12tn");
     expect(errors).toEqual([]);
   });
+});
+
+test("pension reform walkthrough shows sourced exhibits for every step", async ({ page }) => {
+  await page.goto("/work/pension-reform/");
+  const tabs = page.getByRole("tab");
+  await expect(tabs).toHaveCount(5);
+
+  await expect(page.getByRole("tabpanel")).toContainText("PKR 470bn");
+  await tabs.nth(1).click();
+  await expect(page.getByRole("tabpanel")).toContainText("≈ PKR 11.0tn");
+  await expect(page.getByRole("tabpanel")).toContainText("PKR 12.0tn");
+  await tabs.nth(2).click();
+  await expect(page.getByRole("tabpanel").getByRole("row")).toHaveCount(6);
+
+  for (let index = 0; index < 5; index += 1) {
+    await tabs.nth(index).click();
+    await expect(page.getByRole("tabpanel")).toContainText("Source:");
+    await expectNoHorizontalOverflow(page);
+    const axe = await new AxeBuilder({ page }).include("[role='tabpanel']:not([hidden])").analyze();
+    expect(axe.violations.map((v) => `step ${index + 1} ${v.id}: ${v.nodes.length}`)).toEqual([]);
+  }
+  await expect(page.locator("#jamaica")).toContainText("174k");
+});
+
+test("work index lists every published case and hides the empty in-preparation section", async ({ page }) => {
+  await page.goto("/work/");
+
+  await expect(page.locator("main ol > li")).toHaveCount(3);
+  await expect(page.getByRole("link", { name: /Pension reform/ })).toHaveAttribute("href", "/work/pension-reform/");
+  await expect(page.getByRole("heading", { name: "in preparation" })).toHaveCount(0);
 });

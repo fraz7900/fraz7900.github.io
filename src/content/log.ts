@@ -31,6 +31,8 @@ export const LOG: readonly LogEntry[] = [
     date: "2026.05",
     kind: "Announced",
     text: "Jamaica’s government announced the digital pension-system design I led with the World Bank, extending coverage to informal workers through auto-enrolment and micro-pensions.",
+    href: "/work/pension-reform/#jamaica",
+    linkText: "Read more",
   },
   {
     date: "2026.01",
@@ -61,6 +63,8 @@ export const LOG: readonly LogEntry[] = [
     date: "2023.07",
     kind: "Valuation",
     text: "Ran the actuarial revaluation of federal pension liabilities: PKR 12.0 trillion.",
+    href: "/work/pension-reform/",
+    linkText: "Case study",
   },
   {
     date: "2022.11",

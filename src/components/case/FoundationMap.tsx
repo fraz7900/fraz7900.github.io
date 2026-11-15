@@ -5,11 +5,11 @@ export function FoundationMap() {
   const { data, foundation, experiences } = FOUNDATION.layers;
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-line bg-card p-4 sm:p-6">
+    <div className="glass flex flex-col gap-2 rounded-xl p-4 sm:p-6">
       <Layer label="Later experiences">
         <ul className="grid gap-2 sm:grid-cols-3">
           {experiences.map((item) => (
-            <li key={item.name} className="rounded-md border border-dashed border-ink/35 px-3 py-2.5">
+            <li key={item.name} className="rounded-md border border-dashed border-line-strong px-3 py-2.5">
               <p className="font-medium text-ink">{item.name}</p>
               <p className="text-sm text-muted">{item.task}</p>
             </li>
@@ -18,9 +18,9 @@ export function FoundationMap() {
       </Layer>
       <Arrow label="supported by" />
       <Layer label="CareTrak foundation, 2020–2022">
-        <ul className="grid gap-2 rounded-md bg-ink p-2.5 sm:grid-cols-5">
+        <ul className="grid gap-2 rounded-md border border-accent/50 bg-accent-soft/60 p-2.5 sm:grid-cols-5">
           {foundation.map((item) => (
-            <li key={item} className="rounded bg-paper/10 px-3 py-2.5 text-sm font-medium text-paper">
+            <li key={item} className="rounded bg-paper/60 px-3 py-2.5 text-sm font-medium text-ink">
               {item}
             </li>
           ))}
@@ -30,7 +30,7 @@ export function FoundationMap() {
       <Layer label="Population health data">
         <ul className="grid gap-2 sm:grid-cols-3">
           {data.map((item) => (
-            <li key={item} className="rounded-md bg-accent-soft px-3 py-2.5 text-sm text-ink">
+            <li key={item} className="rounded-md border border-line bg-paper/50 px-3 py-2.5 text-sm text-ink">
               {item}
             </li>
           ))}

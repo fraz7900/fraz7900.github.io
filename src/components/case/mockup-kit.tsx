@@ -36,7 +36,7 @@ export function Pin({ n }: { n: number }) {
   return (
     <span
       aria-hidden="true"
-      className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white ring-2 ring-white"
+      className="inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-paper ring-2 ring-paper/60"
     >
       {n}
     </span>
