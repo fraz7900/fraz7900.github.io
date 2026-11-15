@@ -547,6 +547,71 @@ test.describe("motion layer", () => {
     await expect(header).toHaveAttribute("data-hidden", "false");
   });
 
+  test("3D portrait turns toward the pointer as one piece, and eases back when it leaves", async ({ page }) => {
+    await page.goto("/");
+    const scene = page.locator(".portrait-scene");
+    const box = (await page.locator(".portrait-stage").boundingBox())!;
+    const ry = () => scene.evaluate((el) => parseFloat(el.style.getPropertyValue("--ry")));
+
+    await page.mouse.move(box.x + box.width * 0.95, box.y + box.height / 2, { steps: 6 });
+    await expect.poll(ry).toBeGreaterThan(10);
+    await expect(page.locator("body")).toHaveClass(/cursor-hover/);
+    // One picture, turned whole: nothing inside it is offset or moved on its own.
+    await expect(scene.locator("svg")).toHaveCount(1);
+    expect(await scene.locator("svg path").evaluateAll((paths) => paths.every((p) => getComputedStyle(p).transform === "none"))).toBe(true);
+    await expect(scene).toHaveAttribute("style", /--sx: -\d/);
+
+    await page.mouse.move(5, box.y + box.height, { steps: 6 });
+    await expect.poll(async () => Math.abs(await ry())).toBeLessThan(4);
+  });
+
+  test("3D portrait turns further when dragged and with the arrow keys; Escape resets it", async ({ page }) => {
+    await page.goto("/");
+    const scene = page.locator(".portrait-scene");
+    const box = (await page.locator(".portrait-stage").boundingBox())!;
+    const ry = () => scene.evaluate((el) => parseFloat(el.style.getPropertyValue("--ry")));
+    const cx = box.x + box.width / 2;
+    const cy = box.y + box.height / 2;
+
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(cx + 120, cy, { steps: 8 });
+    await expect.poll(ry).toBeGreaterThan(20);
+    await page.mouse.up();
+    await page.mouse.move(5, cy + box.height, { steps: 4 });
+    await expect.poll(async () => Math.abs(await ry())).toBeLessThan(4);
+
+    // A keyboard user arrives fresh (the drag left it focused by the pointer, which keeps the
+    // page's arrow keys for scrolling).
+    await scene.evaluate((el) => (el as HTMLElement).blur());
+    await scene.focus();
+    await expect(scene).toBeFocused();
+    for (let i = 0; i < 3; i++) await page.keyboard.press("ArrowLeft");
+    await expect.poll(ry).toBeLessThan(-10);
+    await page.keyboard.press("Escape");
+    await expect.poll(async () => Math.abs(await ry())).toBeLessThan(4);
+    await expect(scene).toHaveAccessibleName(/Portrait of Fraz Ahmed/);
+    await expect(scene).toHaveAccessibleDescription(/arrow keys/);
+  });
+
+  test("3D portrait: a click doesn't take over the page's arrow keys", async ({ page }) => {
+    await page.goto("/");
+    const scene = page.locator(".portrait-scene");
+    const ry = () => scene.evaluate((el) => parseFloat(el.style.getPropertyValue("--ry") || "0"));
+    // By coordinates: the portrait sways, so it never counts as "stable" for locator.click.
+    const box = (await page.locator(".portrait-stage").boundingBox())!;
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(scene).toBeFocused();
+    await page.mouse.move(5, 700, { steps: 4 });
+    await expect.poll(async () => Math.abs(await ry())).toBeLessThan(4);
+
+    await page.keyboard.press("ArrowDown");
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    await page.keyboard.press("ArrowLeft");
+    await page.waitForTimeout(300);
+    expect(Math.abs(await ry())).toBeLessThan(4);
+  });
+
   test("in-site navigation fades the next page in, direct loads don't", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("main > div").first()).not.toHaveClass(/page-enter/);
@@ -565,4 +630,34 @@ test.describe("motion layer with reduced motion", () => {
     await expect(page.locator("[data-reveal='pending']")).toHaveCount(0);
     await expect(page.locator("#log .eyebrow").first()).toHaveText("02 // career log");
   });
+
+  test("the 3D portrait holds still and takes no input", async ({ page }) => {
+    await page.goto("/");
+    const scene = page.locator(".portrait-scene");
+    const box = (await page.locator(".portrait-stage").boundingBox())!;
+    await page.mouse.move(box.x + box.width * 0.95, box.y + box.height / 2, { steps: 4 });
+    await page.waitForTimeout(400);
+    await expect(scene).not.toHaveAttribute("tabindex");
+    await expect(scene).not.toHaveAttribute("style", /--ry/);
+    await expect(scene).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".portrait-tone").first()).toHaveCSS("opacity", "1");
+  });
+});
+
+test("3D portrait: the static HTML is a plain image, with no controls until JavaScript runs", async ({ request }) => {
+  const html = await (await request.get("/")).text();
+  const tag = html.match(/<div role="img"[^>]*portrait-scene[^>]*>/)?.[0] ?? "";
+  expect(tag).toContain("Portrait of Fraz Ahmed");
+  expect(tag).not.toMatch(/tabindex|data-interactive|aria-describedby/i);
+});
+
+test("3D portrait on a phone: still scrolls and zooms, fits the screen, sways on its own", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== "phone", "touch layout check");
+  await page.goto("/");
+  const scene = page.locator(".portrait-scene");
+  await expect(scene).toHaveCSS("touch-action", "pan-y pinch-zoom");
+  const pose = () => scene.evaluate((el) => getComputedStyle(el).transform);
+  const first = await pose();
+  await expect.poll(pose, { timeout: 3000 }).not.toBe(first);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(await page.evaluate(() => window.innerWidth));
 });

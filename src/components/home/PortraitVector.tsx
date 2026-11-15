@@ -1,10 +1,13 @@
-import type { CSSProperties } from "react";
+import { useId, type CSSProperties } from "react";
 import { PORTRAIT_LAYERS, PORTRAIT_SIZE } from "@/content/portrait-vector";
 import { SITE } from "@/content/site";
-import { PortraitMotion } from "./PortraitMotion";
+import { PortraitTilt } from "./PortraitTilt";
 
 /** Tone ramp for the traced layers, darkest first: navy shadows through blue and teal to near-white. */
 const TONES = ["#0f1e33", "#1a3a63", "#2b6aa0", "#2fa7b4", "#5fe0c8", "#e9f6f4"] as const;
+
+/** Distance from the viewer to the portrait, in px (CSS perspective). */
+const PERSPECTIVE_PX = 900;
 
 /**
  * Out-of-focus lights behind the figure, placed roughly where the city lights sit in the original
@@ -22,43 +25,54 @@ const LIGHTS = [
 
 type Vars = CSSProperties & Record<`--${string}`, string | number>;
 
-/** The headshot as a layered vector: tones build up on load, lights drift, and both follow the pointer. */
+/**
+ * The headshot as one rigid 3D medallion: the gradient ring, then a single picture (drifting city
+ * lights and the six traced tones, drawn flat together so no feature moves on its own), and a soft
+ * highlight. PortraitTilt turns the whole piece; the highlight and shadow follow the turn.
+ */
 export function PortraitVector() {
+  const glowId = useId();
   return (
-    <PortraitMotion>
-      <svg viewBox={`0 0 ${PORTRAIT_SIZE} ${PORTRAIT_SIZE}`} role="img" aria-labelledby="portrait-title" className="size-full">
-        <title id="portrait-title">{`Portrait of ${SITE.name}, drawn as a layered vector from a photograph`}</title>
-        <defs>
-          <filter id="portrait-glow" x="-60%" y="-60%" width="220%" height="220%">
-            <feGaussianBlur stdDeviation="12" />
-          </filter>
-        </defs>
-        <g className="portrait-lights" filter="url(#portrait-glow)">
-          {LIGHTS.map((light) => (
-            <circle
-              key={`${light.cx}-${light.cy}`}
-              className="portrait-light"
-              cx={light.cx}
-              cy={light.cy}
-              r={light.r}
-              fill={light.color}
-              style={{ "--o": light.opacity, "--dx": `${light.dx}px`, "--dy": `${light.dy}px`, "--dur": `${light.dur}s` } as Vars}
-            />
-          ))}
-        </g>
-        <g className="portrait-figure">
+    <PortraitTilt
+      perspective={PERSPECTIVE_PX}
+      label={`Portrait of ${SITE.name}, drawn as a vector from a photograph`}
+      hint="Interactive: it turns toward your pointer. Drag it, or use the arrow keys, to turn it further; Escape resets it."
+    >
+      <div aria-hidden="true" className="portrait-ring absolute inset-0 rounded-full">
+        <svg viewBox={`0 0 ${PORTRAIT_SIZE} ${PORTRAIT_SIZE}`} focusable="false" className="size-full rounded-full">
+          <defs>
+            <filter id={glowId} x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="12" />
+            </filter>
+          </defs>
+          {/* The dark ground the lights blend against. */}
+          <rect width={PORTRAIT_SIZE} height={PORTRAIT_SIZE} fill="var(--color-card)" />
+          <g className="portrait-lights" filter={`url(#${glowId})`}>
+            {LIGHTS.map((light) => (
+              <circle
+                key={`${light.cx}-${light.cy}`}
+                className="portrait-light"
+                cx={light.cx}
+                cy={light.cy}
+                r={light.r}
+                fill={light.color}
+                style={{ "--o": light.opacity, "--dx": `${light.dx}px`, "--dy": `${light.dy}px`, "--dur": `${light.dur}s` } as Vars}
+              />
+            ))}
+          </g>
           {PORTRAIT_LAYERS.map((d, index) => (
             <path
               key={index}
-              className="portrait-tone"
+              className={`portrait-tone${index === 0 ? " portrait-silhouette" : ""}`}
               d={d}
               fill={TONES[Math.min(index, TONES.length - 1)]}
               fillRule="evenodd"
               style={{ "--i": index } as Vars}
             />
           ))}
-        </g>
-      </svg>
-    </PortraitMotion>
+        </svg>
+        <div className="portrait-glare absolute inset-[3px] rounded-full" />
+      </div>
+    </PortraitTilt>
   );
 }

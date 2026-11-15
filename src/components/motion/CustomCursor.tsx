@@ -6,7 +6,7 @@ import { useMotionPreferences } from "./useMotionPreferences";
 
 const RING_EASE = 0.18;
 /** The ring grows over anything you can click or drag. */
-const INTERACTIVE = "a, button, summary, label, select, canvas, [role='button'], [role='tab'], input[type='range'], input[type='checkbox'], input[type='radio']";
+const INTERACTIVE = "a, button, summary, label, select, canvas, [role='button'], [role='tab'], [data-interactive], input[type='range'], input[type='checkbox'], input[type='radio']";
 /** Text fields keep the system I-beam so you can see where you'll type. */
 const NATIVE = "input:not([type='range']):not([type='checkbox']):not([type='radio']), textarea, [contenteditable='true']";
 

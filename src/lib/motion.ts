@@ -21,7 +21,8 @@ export function approach(current: Point, target: Point, ease: number): Point {
 
 export const isSettled = (a: Point, b: Point, epsilon = 0.1) => Math.abs(a.x - b.x) < epsilon && Math.abs(a.y - b.y) < epsilon;
 
-const clamp = (value: number, limit: number) => Math.max(-limit, Math.min(limit, value));
+/** Limits `value` to the range -limit to +limit. */
+export const clamp = (value: number, limit: number) => Math.max(-limit, Math.min(limit, value));
 
 export const MAGNET_STRENGTH = 0.2;
 export const MAGNET_MAX_PX = 8;

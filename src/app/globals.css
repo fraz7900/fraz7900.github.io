@@ -333,21 +333,92 @@ body.cursor-down .cursor-ring {
 }
 
 /*
- * Vector portrait (home). Tones build up darkest first on load; the lights drift; the figure and the
- * lights shift with the pointer at different depths (--px/--py come from PortraitMotion).
+ * 3D vector portrait (home). One rigid medallion: tiltController turns it in perspective through
+ * --rx/--ry on top of a slow CSS sway, and moves the highlight (--gx/--gy) and the drop shadow
+ * (--sx/--sy) with the turn. The picture itself never separates. Tones fade in darkest first on
+ * load and the city lights drift.
  */
-.portrait-figure,
-.portrait-lights {
-  transition: translate 500ms cubic-bezier(0.22, 1, 0.36, 1);
+/* The idle sway: two registered angles animated at unrelated periods, so it never visibly repeats. */
+@property --sway-x {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
 }
 
-.portrait-figure {
-  translate: calc(var(--px, 0) * 7px) calc(var(--py, 0) * 5px);
+@property --sway-y {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.portrait-stage {
+  position: relative; /* perspective is set inline by PortraitTilt */
+}
+
+.portrait-scene {
+  position: relative;
+  /* The pointer's turn (--rx/--ry, from tiltController) rides on top of the sway. */
+  transform: rotateX(calc(var(--rx, 0deg) + var(--sway-x))) rotateY(calc(var(--ry, 0deg) + var(--sway-y)));
+  animation:
+    portrait-sway-x 7.3s ease-in-out infinite alternate,
+    portrait-sway-y 9.7s ease-in-out -3s infinite alternate;
+  will-change: transform;
+}
+
+@keyframes portrait-sway-x {
+  from {
+    --sway-x: -1.8deg;
+  }
+  to {
+    --sway-x: 1.8deg;
+  }
+}
+
+@keyframes portrait-sway-y {
+  from {
+    --sway-y: -2.8deg;
+  }
+  to {
+    --sway-y: 2.8deg;
+  }
+}
+
+.portrait-scene[data-interactive] {
+  /* Sideways drags turn it; vertical swipes still scroll and pinches still zoom the page. */
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.portrait-scene:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 6px;
+}
+
+.portrait-ring {
+  padding: 3px;
+  pointer-events: none;
+  background: conic-gradient(from 200deg, var(--color-accent), var(--color-sky), var(--color-amber), var(--color-accent));
+  /* A drop shadow that slides away from the turn, plus the teal glow. */
+  box-shadow:
+    var(--sx, 0px) calc(14px + var(--sy, 0px)) 34px -10px rgb(0 0 0 / 0.65),
+    0 0 60px -10px color-mix(in srgb, var(--color-accent) 50%, transparent);
+}
+
+.portrait-glare {
+  pointer-events: none;
+}
+
+.portrait-silhouette {
+  filter: drop-shadow(0 10px 12px rgb(0 0 0 / 0.5));
+}
+
+.portrait-glare {
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 35%), rgb(255 255 255 / 0.13), transparent 55%);
 }
 
 .portrait-lights {
-  translate: calc(var(--px, 0) * -16px) calc(var(--py, 0) * -11px);
-  mix-blend-mode: screen; /* lights add to the dark ground instead of muddying it */
+  mix-blend-mode: screen; /* lights add to the dark disc beneath them instead of muddying it */
 }
 
 .portrait-tone {
@@ -365,7 +436,6 @@ body.cursor-down .cursor-ring {
 @keyframes portrait-tone-in {
   from {
     opacity: 0;
-    translate: 0 8px;
   }
 }
 
@@ -378,6 +448,7 @@ body.cursor-down .cursor-ring {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .portrait-scene,
   .portrait-tone,
   .portrait-light {
     animation: none;
