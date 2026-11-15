@@ -101,6 +101,10 @@ test("full tool lets every assumption change and shows negative and zero-cost ca
   await page.getByLabel("Loaded hourly labor cost").fill("0");
   await expect(results(page)).toContainText("Not calculable");
 
+  await page.getByLabel("Adoption").fill("1,,2");
+  await expect(page.getByLabel("Adoption")).toHaveAttribute("aria-invalid", "true");
+  await page.getByLabel("Adoption").fill("75");
+
   await page.getByLabel("Monthly case volume").fill("2000000");
   await expect(page.getByText("Enter a value between 0 and 1,000,000.")).toBeVisible();
 });
@@ -161,6 +165,12 @@ test("command menu supports arrow keys and shows an empty state", async ({ page 
 
   await page.keyboard.press("ArrowDown");
   await expect(page.getByRole("option", { selected: true })).toContainText("Work");
+
+  await page.keyboard.type("work");
+  await page.keyboard.press("Home");
+  await page.keyboard.type("x");
+  await expect(page.getByRole("combobox", { name: "Search pages" })).toHaveValue("xwork");
+  await page.getByRole("combobox", { name: "Search pages" }).fill("");
 
   await page.keyboard.type("zzz");
   await expect(page.getByRole("option")).toHaveCount(0);

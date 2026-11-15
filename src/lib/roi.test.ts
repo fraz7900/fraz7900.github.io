@@ -95,6 +95,22 @@ describe("parseRoiInputs", () => {
     expect(!parsed.ok && parsed.errors.hourlyCostUsd).toMatch(/enter/i);
   });
 
+  test.each(["1,000", "1,000,000", "12,345.5"])("accepts well-formed thousands separators in %s", (raw) => {
+    const parsed = parseRoiInputs({ ...toRawInputs(DEFAULT_ROI_INPUTS), monthlyCases: raw });
+
+    expect(parsed.ok && parsed.values.monthlyCases).toBe(Number(raw.replaceAll(",", "")));
+  });
+
+  test.each(["1,,2", "12,34", ",5", "1,0000", "1,000,", "1.5,000"])(
+    "rejects malformed thousands separators in %s",
+    (raw) => {
+      const parsed = parseRoiInputs({ ...toRawInputs(DEFAULT_ROI_INPUTS), adoptionPercent: raw });
+
+      expect(parsed.ok).toBe(false);
+      expect(!parsed.ok && parsed.errors.adoptionPercent).toMatch(/number/i);
+    },
+  );
+
   test.each(["abc", "12abc", "1e3", "--4", "Infinity", "NaN", "0x10"])(
     "flags non-numeric input %s",
     (raw) => {

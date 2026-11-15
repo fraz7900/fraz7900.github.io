@@ -59,11 +59,10 @@ export function CommandMenu() {
 
   const onInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const last = results.length - 1;
+    // Arrow keys only: Home/End stay with the text field for caret movement.
     const moves: Record<string, number> = {
       ArrowDown: safeIndex >= last ? 0 : safeIndex + 1,
       ArrowUp: safeIndex <= 0 ? last : safeIndex - 1,
-      Home: 0,
-      End: last,
     };
     if (event.key in moves && results.length > 0) {
       event.preventDefault();

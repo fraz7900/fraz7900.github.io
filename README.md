@@ -15,6 +15,9 @@ It's a static Next.js App Router site (TypeScript, Tailwind, npm) exported to `o
 `/work/ehr-integration/` is intentionally **not** built. It goes live once the case study has
 verified, shareable detail. The draft lives outside the repo, in the OneDrive `Website` folder.
 
+The export also contains `404.html`, `404/` and `_not-found/`. All three are Next.js copies of the
+same `noindex` error page. GitHub Pages uses `404.html`, and the other two are harmless.
+
 ## Where to edit
 
 - `src/content/site.ts`: name, headline, copy, navigation, and résumé link (`resumeHref`, `null` until a verified file is in `public/`)

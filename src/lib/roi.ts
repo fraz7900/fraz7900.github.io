@@ -108,12 +108,16 @@ export function calculateRoi(inputs: RoiInputs): RoiResult {
   return { adoptedCases, hoursSaved, grossMonthlyValue, netMonthlyValue, breakEvenMinutes };
 }
 
-const NUMBER_PATTERN = /^-?(\d+\.?\d*|\.\d+)$/;
+// Plain digits, or digits grouped in threes with commas (1,000,000); optional decimal part.
+const NUMBER_PATTERN = /^-?(\d+|\d{1,3}(,\d{3})+)?(\.\d*)?$/;
 
 function parseField(field: RoiField, raw: string): { value: number } | { error: string } {
-  const cleaned = raw.trim().replaceAll(",", "");
-  if (cleaned === "") return { error: `Enter ${field.label.toLowerCase()}.` };
-  if (!NUMBER_PATTERN.test(cleaned)) return { error: "Enter a number, for example 800 or 4.5." };
+  const trimmed = raw.trim();
+  if (trimmed === "") return { error: `Enter ${field.label.toLowerCase()}.` };
+  if (!NUMBER_PATTERN.test(trimmed) || !/\d/.test(trimmed)) {
+    return { error: "Enter a number, for example 800, 1,200 or 4.5." };
+  }
+  const cleaned = trimmed.replaceAll(",", "");
 
   const value = Number(cleaned);
   if (value < field.min || value > field.max) {

@@ -25,7 +25,8 @@ export const PUBLISHED_WORK: readonly WorkEntry[] = [
     title: "Workflow ROI calculator",
     kind: "Tool",
     decision: "Is a workflow change worth its recurring cost, and how much time must it save to break even?",
-    role: "Designed the model and built the tool.",
+    // Keep this wording until Fraz confirms how to describe his authorship of the model.
+    role: "Built for this site to show how I frame a workflow investment decision.",
     inspect: "Editable assumptions, the formula, a worked example and the break-even threshold.",
     href: "/tools/workflow-roi/",
   },
