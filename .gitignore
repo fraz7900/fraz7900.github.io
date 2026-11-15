@@ -13,3 +13,18 @@ docs-onedrive
 .beads-credential-key
 .beads/proxieddb/
 *.gate.lock*
+
+# Next.js
+/.next/
+/out/
+/coverage/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+*.pem
+.vercel
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/

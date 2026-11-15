@@ -60,18 +60,22 @@ This protocol applies when ending a Beads implementation workflow. It is subordi
 
 ## Build & Test
 
-_Add your build and test commands here_
-
 ```bash
-# Example:
-# npm install
-# npm test
+npm run check   # lint → typecheck → vitest → next build (static export to out/) → playwright e2e against out/
 ```
 
 ## Architecture Overview
 
-_Add a brief overview of your project architecture_
+Static Next.js 16 App Router site, `output: "export"` + `trailingSlash: true`, deployed to GitHub Pages
+as a user site (empty base path). No server features, database, auth, API keys or external calls.
+`cacheComponents`/`partialPrefetching` must stay off: they break static export ("PPR cannot be enabled in export mode").
+
+- Content: `src/content/site.ts`, `src/content/work.ts`
+- Calculator math: `src/lib/roi.ts` only. Both calculator views render `src/components/RoiCalculator.tsx`.
 
 ## Conventions & Patterns
 
-_Add your project-specific conventions here_
+- Publish only verified, shareable facts. Draft case studies and private notes stay outside the repo
+  (OneDrive `Website` folder, linked as `docs-onedrive/`, gitignored).
+- No résumé/contact/LinkedIn links until the real asset is supplied (`SITE.resumeHref`).
+- Round only for presentation; keep model values unrounded.
