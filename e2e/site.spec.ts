@@ -12,6 +12,7 @@ const ROUTES = [
   { path: "/work/public-finance/", title: /^Public finance · Fraz Ahmed$/, heading: /^Public finance$/ },
   { path: "/work/research/", title: /^Research · Fraz Ahmed$/, heading: /^Research$/ },
   { path: "/work/consulting/", title: /^Consulting · Fraz Ahmed$/, heading: /^Consulting$/ },
+  { path: "/work/consulting/wabtec-mining/", title: /^Wabtec mining strategy case study · Fraz Ahmed$/, heading: /China question in mining/ },
 ] as const;
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -329,7 +330,7 @@ test("work index shows the five tracks with product management first", async ({ 
   await expect(tracks).toHaveCount(5);
   await expect(tracks.first()).toHaveAttribute("href", "/work/product-management/");
   await expect(tracks.nth(4)).toHaveAttribute("href", "/advising/");
-  await expect(page.locator("main")).toContainText("in preparation");
+  await expect(tracks.nth(2)).toHaveAttribute("href", "/work/consulting/");
 });
 
 test("product portfolio: the hiring lens switches roles and every item names its source", async ({ page }) => {
@@ -371,4 +372,33 @@ test("nav highlights Product on product case studies and Work on other tracks", 
   await page.goto("/work/research/");
   await expect(nav.getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "page");
   await expect(nav.getByRole("link", { name: "Product" })).not.toHaveAttribute("aria-current", "page");
+});
+
+test("Wabtec case: the battery-cost model reproduces the base case and responds to its inputs", async ({ page }) => {
+  await page.goto("/work/consulting/wabtec-mining/");
+  const results = page.locator("dl[aria-live]").first();
+  await expect(results).toContainText("$546k");
+  await expect(results).toContainText("$865k");
+  await expect(results).toContainText("$319k");
+  await expect(results).toContainText("8.3%");
+
+  const premium = page.getByLabel("ABS premium over a Chinese pack");
+  await premium.fill("2.73");
+  await expect(results).toContainText("$945k");
+  await expect(results).toContainText("24.5%");
+  await page.getByRole("button", { name: "Reset to the base case" }).click();
+  await expect(results).toContainText("$319k");
+});
+
+test("Wabtec case: regions explain their score and the scoring demo recomputes", async ({ page }) => {
+  await page.goto("/work/consulting/wabtec-mining/");
+  await page.getByRole("button", { name: /North America/ }).click();
+  await expect(page.getByRole("button", { name: /North America/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByText(/Triple-stacked US tariffs/)).toBeVisible();
+
+  const score = page.locator("dl[aria-live]").last();
+  const before = await score.innerText();
+  await page.getByLabel("Fact 1 direction").selectOption("against");
+  await expect(score).not.toHaveText(before);
+  await expect(page.getByText(/Illustrative facts, not the engagement/)).toBeVisible();
 });

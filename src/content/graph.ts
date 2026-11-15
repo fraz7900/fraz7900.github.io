@@ -25,6 +25,7 @@ export const GRAPH_NODES: readonly GraphNode[] = [
   { id: "pension", label: "Pension reform (MoF)", type: "work", href: "/work/pension-reform/" },
   { id: "jamaica", label: "Jamaica pension design", type: "work", href: "/work/pension-reform/#jamaica" },
   { id: "pensionfisc", label: "pensionfisc costing toolkit", type: "work" },
+  { id: "wabtec", label: "Wabtec mining strategy (Kearney)", type: "work", href: "/work/consulting/wabtec-mining/" },
 
   { id: "healthcare", label: "Healthcare SaaS", type: "domain" },
   { id: "vbc", label: "Value-based care", type: "domain" },
@@ -46,6 +47,10 @@ export const GRAPH_NODES: readonly GraphNode[] = [
   { id: "fiscal-risk", label: "Fiscal risk analysis", type: "method" },
   { id: "regulatory", label: "Regulatory drafting", type: "method" },
   { id: "dpi", label: "Digital public infrastructure", type: "method" },
+  { id: "cost-model", label: "Cost modelling and sensitivity", type: "method" },
+  { id: "trade-data", label: "Trade-data analysis", type: "method" },
+  { id: "fin-statements", label: "Financial-statement analysis", type: "method" },
+  { id: "consulting", label: "Strategy consulting", type: "domain" },
 
   { id: "r", label: "R / RStudio", type: "tool" },
   { id: "databricks", label: "Databricks", type: "tool" },
@@ -93,4 +98,10 @@ export const GRAPH_LINKS: readonly (readonly [string, string])[] = [
   ["pensionfisc", "python"],
   ["pensionfisc", "public-finance"],
   ["enterprise-strategy", "product-strategy"],
+  ["wabtec", "consulting"],
+  ["wabtec", "cost-model"],
+  ["wabtec", "trade-data"],
+  ["wabtec", "fin-statements"],
+  ["wabtec", "python"],
+  ["consulting", "enterprise-strategy"],
 ];

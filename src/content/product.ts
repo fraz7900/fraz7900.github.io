@@ -133,7 +133,7 @@ export const HIRING_LENSES: readonly HiringLens[] = [
       },
       {
         claim: "Understood the business model",
-        detail: "Supported health-financing analytics, including CMS-HCC risk adjustment for Medicare Advantage, aligning payments with patient risk.",
+        detail: "Managed health-financing analytics, including CMS-HCC risk adjustment for Medicare Advantage, aligning payments with patient risk.",
         source: "CV",
       },
       {

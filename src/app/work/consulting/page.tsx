@@ -3,9 +3,14 @@ import { TrackPage } from "@/components/TrackPage";
 
 export const metadata: Metadata = {
   title: "Consulting",
-  description: "Consulting case studies by Fraz Ahmed, in preparation.",
+  description: "Strategy consulting case studies by Fraz Ahmed: financial modelling, cost modelling and market research.",
 };
 
 export default function ConsultingPage() {
-  return <TrackPage id="consulting" intro="Consulting case studies will appear here as they are written up." />;
+  return (
+    <TrackPage
+      id="consulting"
+      intro="Strategy consulting with a quantitative core: build the model, show its sensitivity, and say plainly what the evidence can’t support."
+    />
+  );
 }

@@ -97,7 +97,8 @@ export const NAV_ITEMS: readonly NavItem[] = [
 const PORTFOLIO_COMMANDS: readonly NavItem[] = [
   { href: "/work/public-finance/", label: "Public finance work", description: "Pension reform, World Bank, export schemes", kind: "go" },
   { href: "/work/research/", label: "Research", description: "Working papers and the pensionfisc toolkit", kind: "go" },
-  { href: "/work/consulting/", label: "Consulting", description: "Case studies in preparation", kind: "go" },
+  { href: "/work/consulting/", label: "Consulting", description: "Strategy consulting work", kind: "go" },
+  { href: "/work/consulting/wabtec-mining/", label: "Wabtec mining strategy case study", description: "Kearney engagement: cost model, trade data, scoring", kind: "case" },
   { href: "/#map", label: "Strategy map", description: "How the work connects, as a live graph", kind: "go" },
   { href: "/tools/workflow-roi/", label: "ROI calculator", description: "Estimate the monthly value of a workflow change", kind: "tool" },
 ];

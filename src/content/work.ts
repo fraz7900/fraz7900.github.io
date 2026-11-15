@@ -55,7 +55,7 @@ export const TRACKS: readonly Track[] = [
     id: "consulting",
     title: "Consulting",
     href: "/work/consulting/",
-    summary: "Consulting case studies will be added here.",
+    summary: "Quant-heavy strategy work: financial-statement analysis, cost modelling and trade data on Chinese disruption in mining equipment, for Wabtec with Kearney.",
     forWhom: "Strategy and management consulting roles",
   },
   {
@@ -120,6 +120,16 @@ export const WORK_ITEMS: readonly WorkItem[] = [
     years: "2022–2023",
     summary: "Designed duty drawback and tax holiday schemes during the 2022–23 balance-of-payments crisis, identifying about 30% compliance-cost savings for 500+ exporters.",
     status: "listed",
+  },
+  // Consulting
+  {
+    track: "consulting",
+    title: "The China question in mining: should Wabtec worry about Chinese haul trucks?",
+    context: "CMU × Kearney student consulting lab for Wabtec Mining",
+    years: "2026",
+    summary: "Financial-statement analysis of Komatsu and XCMG, a battery-pack cost model with sensitivity, a UN Comtrade pipeline and evidence-weighted regional scoring, ending in three moves for Wabtec.",
+    status: "case-study",
+    href: "/work/consulting/wabtec-mining/",
   },
   // Research
   {
