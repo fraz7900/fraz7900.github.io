@@ -78,4 +78,6 @@ as a user site (empty base path). No server features, database, auth, API keys o
 - Publish only verified, shareable facts. Draft case studies and private notes stay outside the repo
   (OneDrive `Website` folder, linked as `docs-onedrive/`, gitignored).
 - No résumé/contact/LinkedIn links until the real asset is supplied (`SITE.resumeHref`).
+- Advising content and booking config live in `src/content/advising/`; read `docs/advising-setup.md` first.
+  Never invent stories, outcomes, deadlines or availability; dates need a `lastChecked` source check.
 - Round only for presentation; keep model values unrounded.

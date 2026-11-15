@@ -88,6 +88,17 @@ export const NAV_ITEMS: readonly NavItem[] = [
     kind: "tool",
   },
   { href: "/about/", label: "About", description: "Healthcare SaaS, public finance and CMU", kind: "go" },
+  { href: "/advising/", label: "Advising", description: "One-to-one career, admissions and test-prep guidance", kind: "go" },
+];
+
+/** Advising sub-pages: in the command menu, but kept out of the top-level navigation. */
+const ADVISING_COMMANDS: readonly NavItem[] = [
+  { href: "/advising/book/", label: "Book an advising conversation", description: "Introductory conversations are currently free", kind: "go" },
+  { href: "/advising/career/", label: "Career guidance", description: "Direction, transitions, CV and interview preparation", kind: "go" },
+  { href: "/advising/admissions/", label: "Admissions support", description: "Shortlists, statements and readiness checklist", kind: "tool" },
+  { href: "/advising/test-prep/", label: "Test preparation planning", description: "Build a week-by-week study plan", kind: "tool" },
+  { href: "/advising/scholarships/", label: "Scholarship guides", description: "Fulbright (Pakistan), Chevening, Australia Awards", kind: "go" },
+  { href: "/advising/updates/", label: "Admissions and scholarship updates", description: "Source-checked dates and guidance", kind: "go" },
 ];
 
 export const HOME_ITEM: NavItem = { href: "/", label: "Home", description: "Introduction", kind: "go" };
@@ -108,6 +119,7 @@ export const COMMANDS: readonly NavItem[] = [
     description: "Clinical AI from integration to production",
     kind: "case",
   },
+  ...ADVISING_COMMANDS,
   ...SOCIAL_LINKS,
   ...(SITE.resumeHref
     ? [{ href: SITE.resumeHref, label: "Download CV (PDF)", description: "Résumé", kind: "pdf" as const }]

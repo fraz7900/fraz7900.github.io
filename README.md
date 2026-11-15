@@ -12,6 +12,8 @@ It's a static Next.js App Router site (TypeScript, Tailwind, npm) exported to `o
 | `/tools/workflow-roi/` | Full calculator, formula, assumptions, worked example |
 | `/about/` | Short biography |
 | `/work/caretrak/` | CareTrak case study: five-step walkthrough with annotated product mockups |
+| `/work/pension-reform/` | Pension reform case study: five-step walkthrough with sourced exhibits |
+| `/advising/…` | Advising: career, admissions, test prep, scholarships, stories, updates, booking. See [docs/advising-setup.md](docs/advising-setup.md) |
 
 The CareTrak mockups are code-native (HTML/CSS in `src/components/case/`) and use synthetic data,
 so they stay sharp at any zoom. Case copy lives in `src/content/caretrak.ts`. Source material and

@@ -6,6 +6,8 @@ const PORT = 4173;
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: true,
+  // Walkthrough tests run axe once per step (5 scans), which can exceed 30s under full parallel load.
+  timeout: 60_000,
   forbidOnly: Boolean(process.env.CI),
   reporter: "list",
   use: {
