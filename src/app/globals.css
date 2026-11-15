@@ -11,6 +11,15 @@
   --color-accent-soft: #e2ece8;
   --color-danger: #9e2f29;
 
+  /* Product-mockup surfaces: a cooler clinical UI that reads as an artifact on the paper page. */
+  --color-ui: #ffffff;
+  --color-ui-sub: #f2f5f6;
+  --color-ui-line: #d9e0e3;
+  --color-ui-muted: #586373;
+  --color-warn: #7d5200;
+  --color-warn-soft: #fbefd6;
+  --color-stop-soft: #f6e2df;
+
   --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;

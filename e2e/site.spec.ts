@@ -6,6 +6,7 @@ const ROUTES = [
   { path: "/work/", title: /^Work · Fraz Ahmed$/, heading: /^Work$/ },
   { path: "/tools/workflow-roi/", title: /^Workflow ROI calculator · Fraz Ahmed$/, heading: /Workflow ROI calculator/ },
   { path: "/about/", title: /^About · Fraz Ahmed$/, heading: /Fraz Ahmed/ },
+  { path: "/work/caretrak/", title: /^CareTrak case study · Fraz Ahmed$/, heading: /CareTrak/ },
 ] as const;
 
 async function expectNoHorizontalOverflow(page: Page) {
@@ -39,13 +40,61 @@ test("a path without a trailing slash resolves to the page", async ({ page }) =>
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Work");
 });
 
-test("the unpublished case study is not exported or linked", async ({ page }) => {
+test("draft routes and source material are not exported or linked", async ({ page }) => {
   const response = await page.goto("/work/ehr-integration/");
   expect(response?.status()).toBe(404);
 
   for (const route of ROUTES) {
     await page.goto(route.path);
-    await expect(page.locator("a[href*='ehr-integration']")).toHaveCount(0);
+    await expect(page.locator("a[href*='ehr-integration'], a[href*='case-drafts'], img[src*='persivia']")).toHaveCount(0);
+  }
+});
+
+test("CareTrak walkthrough steps are keyboard operable and show their mockups", async ({ page }) => {
+  await page.goto("/work/caretrak/");
+  const tabs = page.getByRole("tab");
+  await expect(tabs).toHaveCount(5);
+
+  await tabs.first().focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(tabs.nth(1)).toBeFocused();
+  await expect(tabs.nth(1)).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("Shared definitions");
+
+  await page.keyboard.press("End");
+  await expect(tabs.nth(4)).toHaveAttribute("aria-selected", "true");
+  await expect(page.getByRole("tabpanel")).toContainText("Operations dashboard");
+
+  await page.getByRole("button", { name: /^Previous:/ }).click();
+  await expect(tabs.nth(3)).toBeFocused();
+  await expect(page.getByRole("tabpanel")).toContainText("Candidates to review");
+  await expectNoHorizontalOverflow(page);
+});
+
+test("CareTrak review mockup shows the evidence for the selected candidate", async ({ page }) => {
+  await page.goto("/work/caretrak/");
+  await page.getByRole("tab", { name: /Keep the clinician in the loop/ }).click();
+  const panel = page.getByRole("tabpanel");
+
+  await expect(panel.locator("mark")).toContainText("diabetic nephropathy");
+  await panel.getByRole("button", { name: /I50\.22/ }).click();
+  await expect(panel.getByRole("button", { name: /I50\.22/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(panel.locator("mark")).toHaveText("No history of heart failure");
+  await expect(panel).toContainText("mentioned only to rule it out");
+
+  const axe = await new AxeBuilder({ page }).include("[role='tabpanel']:not([hidden])").analyze();
+  expect(axe.violations.map((v) => `${v.id}: ${v.nodes.length}`)).toEqual([]);
+});
+
+test("every CareTrak walkthrough step passes axe and fits the viewport", async ({ page }) => {
+  await page.goto("/work/caretrak/");
+  const tabs = page.getByRole("tab");
+
+  for (let index = 0; index < 5; index += 1) {
+    await tabs.nth(index).click();
+    await expectNoHorizontalOverflow(page);
+    const axe = await new AxeBuilder({ page }).include("[role='tabpanel']:not([hidden])").analyze();
+    expect(axe.violations.map((v) => `step ${index + 1} ${v.id}: ${v.nodes.length}`)).toEqual([]);
   }
 });
 

@@ -11,9 +11,11 @@ It's a static Next.js App Router site (TypeScript, Tailwind, npm) exported to `o
 | `/work/` | Published work index plus work in preparation (no links) |
 | `/tools/workflow-roi/` | Full calculator, formula, assumptions, worked example |
 | `/about/` | Short biography |
+| `/work/caretrak/` | CareTrak case study: five-step walkthrough with annotated product mockups |
 
-`/work/ehr-integration/` is intentionally **not** built. It goes live once the case study has
-verified, shareable detail. The draft lives outside the repo, in the OneDrive `Website` folder.
+The CareTrak mockups are code-native (HTML/CSS in `src/components/case/`) and use synthetic data,
+so they stay sharp at any zoom. Case copy lives in `src/content/caretrak.ts`. Source material and
+4× PNG exports stay outside the repo, in the OneDrive `Website/case-drafts/` folder.
 
 The export also contains `404.html`, `404/` and `_not-found/`. All three are Next.js copies of the
 same `noindex` error page. GitHub Pages uses `404.html`, and the other two are harmless.

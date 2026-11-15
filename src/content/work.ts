@@ -22,6 +22,15 @@ export interface PlannedWork {
 
 export const PUBLISHED_WORK: readonly WorkEntry[] = [
   {
+    title: "CareTrak: clinical AI from integration to production",
+    kind: "Case study · Healthcare SaaS · Persivia",
+    decision:
+      "How to bring an EHR-integrated, AI-supported workflow into production across 50+ facilities without letting data readiness, evaluation or performance slip.",
+    role: "Product Manager. Led the operational launch, NLP evaluation criteria and operational analytics.",
+    inspect: "A five-step walkthrough with annotated product mockups, results, trade-offs and lessons.",
+    href: "/work/caretrak/",
+  },
+  {
     title: "Workflow ROI calculator",
     kind: "Tool",
     decision: "Is a workflow change worth its recurring cost, and how much time must it save to break even?",
@@ -33,11 +42,6 @@ export const PUBLISHED_WORK: readonly WorkEntry[] = [
 ];
 
 export const IN_PREPARATION: readonly PlannedWork[] = [
-  {
-    title: "EHR integration and rollout",
-    kind: "Case study · Healthcare SaaS",
-    decision: "Product delivery for an EHR integration at Persivia (CareTrak).",
-  },
   {
     title: "Pension reform",
     kind: "Case study · Public finance",
