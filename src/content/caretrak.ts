@@ -34,7 +34,7 @@ export const STEPS: readonly WalkthroughStep[] = [
     title: "Connect the data",
     summary: "API-first interoperability brought EHR data from 50+ health systems into CareTrak.",
     myWork: [
-      "Led a team of 10 software engineers and 3 QA analysts to close EHR interoperability gaps with an API-first architecture across 50+ health systems, creating integrated data pipelines for payers and providers.",
+      "Led a team of 10 software engineers and 3 QA analysts to close EHR interoperability gaps with an API-first architecture across 50+ health systems, replacing flat-file feeds.",
       "Implementation time fell by a reported 30%.",
     ],
     whyItMatters:
