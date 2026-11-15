@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "preview": "python3 -m http.server 4173 --directory out",
     "test:e2e": "playwright test",
-    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e"
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run test:e2e",
+    "check:publish": "node scripts/check-publish-ready.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

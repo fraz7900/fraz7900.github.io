@@ -43,7 +43,7 @@ export function RoiCalculator({ editable, linkToFullTool = false }: RoiCalculato
       onSubmit={(event) => event.preventDefault()}
       aria-label="Workflow ROI calculator"
     >
-      <fieldset className="flex flex-col gap-4">
+      <fieldset className="flex min-w-0 flex-col gap-4">
         <legend className="sr-only">Assumptions you can change</legend>
         {editableFields.map((field) => (
           <RoiInput

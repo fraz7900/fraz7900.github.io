@@ -10,7 +10,7 @@ export function MockFrame({
   children: React.ReactNode;
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-ui-line bg-ui text-[13px] leading-snug text-ink shadow-[0_18px_40px_-24px_rgb(21_35_59/0.45)]">
+    <div className="light-surface overflow-hidden rounded-lg border border-ui-line bg-ui text-[13px] leading-snug text-ink shadow-[0_18px_40px_-24px_rgb(0_0_0/0.6)]">
       <div className="flex items-center justify-between gap-3 border-b border-ui-line bg-ink px-4 py-2.5 text-paper">
         <div className="flex min-w-0 items-center gap-2">
           <span aria-hidden="true" className="flex gap-1">

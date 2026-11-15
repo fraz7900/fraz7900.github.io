@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
 const ROUTES = [
-  { path: "/", title: /Fraz Ahmed/, heading: /decide what to build/ },
+  { path: "/", title: /Fraz Ahmed/, heading: /^Fraz Ahmed$/ },
   { path: "/work/", title: /^Work · Fraz Ahmed$/, heading: /^Work$/ },
   { path: "/tools/workflow-roi/", title: /^Workflow ROI calculator · Fraz Ahmed$/, heading: /Workflow ROI calculator/ },
   { path: "/about/", title: /^About · Fraz Ahmed$/, heading: /Fraz Ahmed/ },
@@ -240,4 +240,57 @@ test("the first Tab stop is the skip link and it moves focus to main content", a
   await expect(skip).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.locator("main")).toBeFocused();
+});
+
+test("homepage tells the story in numbered sections", async ({ page }) => {
+  await page.goto("/");
+
+  for (const name of ["Hi, I’m Fraz.", "Recent milestones", "Product delivery in regulated software", "Workflow ROI calculator"]) {
+    await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
+  }
+  await expect(page.locator("#about dd").first()).toHaveText("50+");
+  await expect(page.locator("#log li")).toHaveCount(6);
+});
+
+test("strategy map renders, toggles node types and offers a list view", async ({ page }) => {
+  await page.goto("/#map");
+  const canvas = page.getByRole("img", { name: /Strategy map/ });
+  await expect(canvas).toHaveAttribute("data-ready", "true");
+
+  const methods = page.getByRole("button", { name: "Methods" });
+  await expect(methods).toHaveAttribute("aria-pressed", "true");
+  await methods.click();
+  await expect(methods).toHaveAttribute("aria-pressed", "false");
+
+  await page.getByText("Browse the map as a list").click();
+  const list = page.locator("#map details");
+  await expect(list.getByRole("link", { name: "CareTrak case study" })).toBeVisible();
+  await expect(list).toContainText("Connected to");
+  await expectNoHorizontalOverflow(page);
+});
+
+test("command menu lists case studies with kind tags", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: /Jump to/ }).click();
+  await page.keyboard.type("care");
+
+  await expect(page.getByRole("option").first()).toContainText("CareTrak case study");
+  await expect(page.getByRole("option").first()).toContainText("case");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/work\/caretrak\/$/);
+});
+
+test.describe("with reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("the hero is static and nothing errors", async ({ page }) => {
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
+    await page.goto("/");
+    await page.waitForTimeout(2500);
+
+    await expect(page.locator("h1 + p [aria-hidden] span").nth(1)).toHaveText("deciding what to build");
+    await expect(page.locator("#about dd").first()).toHaveText("50+");
+    expect(errors).toEqual([]);
+  });
 });

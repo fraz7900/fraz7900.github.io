@@ -2,10 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
-import { HOME_ITEM, NAV_ITEMS, type NavItem } from "@/content/site";
+import { COMMANDS, type NavItem } from "@/content/site";
 import { searchPages } from "@/lib/searchPages";
 
-const PAGES: readonly NavItem[] = [HOME_ITEM, ...NAV_ITEMS];
+const PAGES: readonly NavItem[] = COMMANDS;
 const APPLE_PLATFORM = /Mac|iPhone|iPad|iPod/;
 
 const subscribeNothing = () => () => {};
@@ -54,7 +54,9 @@ export function CommandMenu() {
   const goTo = (page: NavItem | undefined) => {
     if (!page) return;
     close();
-    router.push(page.href);
+    const isInternalPage = page.href.startsWith("/") && !page.href.endsWith(".pdf");
+    if (isInternalPage) router.push(page.href);
+    else window.location.assign(page.href);
   };
 
   const onInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -79,7 +81,7 @@ export function CommandMenu() {
         type="button"
         onClick={open}
         aria-haspopup="dialog"
-        className="inline-flex items-center gap-2 rounded-md border border-line bg-card px-2.5 py-1.5 font-mono text-xs text-muted hover:border-ink hover:text-ink"
+        className="inline-flex items-center gap-2 rounded-md border border-line-strong bg-card/60 px-2.5 py-1.5 font-mono text-xs text-muted hover:border-accent hover:text-ink"
       >
         <span>Jump to</span>
         <kbd className="hidden rounded border border-line px-1 py-px text-[0.7rem] sm:inline">
@@ -128,10 +130,15 @@ export function CommandMenu() {
                 aria-selected={index === safeIndex}
                 onClick={() => goTo(page)}
                 onMouseMove={() => setActiveIndex(index)}
-                className="flex cursor-pointer flex-col rounded px-3 py-2 aria-selected:bg-accent-soft"
+                className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 aria-selected:bg-accent-soft"
               >
-                <span className="text-sm font-medium text-ink">{page.label}</span>
-                <span className="text-xs text-muted">{page.description}</span>
+                <span className="w-12 shrink-0 rounded border border-line-strong py-0.5 text-center font-mono text-[0.65rem] text-accent">
+                  {page.kind ?? "go"}
+                </span>
+                <span className="flex min-w-0 flex-col">
+                  <span className="text-sm font-medium text-ink">{page.label}</span>
+                  <span className="truncate text-xs text-muted">{page.description}</span>
+                </span>
               </li>
             ))}
           </ul>

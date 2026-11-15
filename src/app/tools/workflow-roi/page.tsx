@@ -44,7 +44,7 @@ export default function WorkflowRoiPage() {
 
       <section
         aria-labelledby="calculator-heading"
-        className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
+        className="grid grid-cols-[minmax(0,1fr)] gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]"
       >
         <div className="rounded-lg border border-line bg-card p-5 sm:p-6">
           <h2 id="calculator-heading" className="mb-5 font-display text-2xl text-ink">
