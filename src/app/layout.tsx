@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
+import { CustomCursor } from "@/components/motion/CustomCursor";
+import { PointerEffects } from "@/components/motion/PointerEffects";
+import { RevealOnScroll } from "@/components/motion/RevealOnScroll";
 import { ScrollProgress } from "@/components/space/ScrollProgress";
 import { SpaceBackground } from "@/components/space/SpaceBackground";
 import { SITE } from "@/content/site";
@@ -41,6 +44,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <SiteFooter />
+        <PointerEffects />
+        <RevealOnScroll />
+        <CustomCursor />
       </body>
     </html>
   );

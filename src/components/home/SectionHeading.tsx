@@ -1,3 +1,5 @@
+import { DecodeText } from "@/components/motion/DecodeText";
+
 /** Numbered section heading: a rule, `01 // about`, then the title. The homepage really is a sequence. */
 export function SectionHeading({
   index,
@@ -16,7 +18,8 @@ export function SectionHeading({
         <span aria-hidden="true" className="h-px w-10 bg-accent/70" />
         <span>
           <span className="text-faint">{index}</span>
-          {` // ${label}`}
+          {" "}
+          <DecodeText text={`// ${label}`} />
         </span>
       </p>
       <h2 id={id} className="font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">

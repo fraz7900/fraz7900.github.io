@@ -402,3 +402,105 @@ test("Wabtec case: regions explain their score and the scoring demo recomputes",
   await expect(score).not.toHaveText(before);
   await expect(page.getByText(/Illustrative facts, not the engagement/)).toBeVisible();
 });
+
+test.describe("motion layer", () => {
+  test.beforeEach(({}, testInfo) => {
+    test.skip(testInfo.project.name === "phone", "pointer effects are for mouse and pen");
+  });
+
+  test("custom cursor follows the mouse, grows over links and steps aside for dialogs", async ({ page }) => {
+    await page.goto("/");
+    const layer = page.locator(".cursor-layer");
+    await expect(layer).toHaveCount(1);
+
+    await page.mouse.move(420, 300);
+    await expect(page.locator(".cursor-dot")).toHaveCSS("translate", "420px 300px");
+    await expect(layer).toHaveCSS("opacity", "1");
+
+    await page.getByRole("link", { name: "See my product portfolio" }).hover();
+    await expect(page.locator("body")).toHaveClass(/cursor-hover/);
+
+    await page.keyboard.press("Control+k");
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(layer).toHaveCSS("opacity", "0");
+  });
+
+  test("buttons lean toward the pointer and settle when it leaves", async ({ page }) => {
+    await page.goto("/");
+    const button = page.getByRole("link", { name: "See my product portfolio" });
+    const box = (await button.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2 + 30, box.y + box.height / 2);
+    await expect(button).toHaveAttribute("style", /--mag-x: 6px/);
+
+    await page.mouse.move(5, 5);
+    await expect(button).not.toHaveAttribute("style", /--mag-x/);
+  });
+
+  test("cards light their border where the pointer is", async ({ page }) => {
+    await page.goto("/work/");
+    const card = page.locator(".glass").first();
+    await card.hover({ position: { x: 40, y: 20 } });
+    await expect(card).toHaveAttribute("style", /--spot-x: (39|40|41)(\.\d+)?px/);
+    await expect.poll(() => card.evaluate((el) => getComputedStyle(el, "::before").opacity)).toBe("1");
+  });
+
+  test("section labels decode into their real text", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("#about").scrollIntoViewIfNeeded();
+    await expect(page.locator("#about .eyebrow").first()).toHaveText("01 // about");
+  });
+
+  test("sections below the fold fade in as they arrive", async ({ page }) => {
+    await page.goto("/");
+    const log = page.locator("#log");
+    await expect(log).toHaveAttribute("data-reveal", "pending");
+    await log.scrollIntoViewIfNeeded();
+    await expect(log).toHaveAttribute("data-reveal", "shown");
+    await expect(log).toHaveCSS("opacity", "1");
+  });
+
+  test("the section rail jumps to a section and marks where you are", async ({ page }) => {
+    await page.goto("/");
+    const rail = page.getByRole("navigation", { name: "Page sections" });
+    await expect(rail.getByRole("link", { name: "Intro" })).toHaveAttribute("aria-current", "true");
+
+    await rail.getByRole("link", { name: "Work" }).click();
+    await expect(page).toHaveURL(/#work$/);
+    await expect(rail.getByRole("link", { name: "Work" })).toHaveAttribute("aria-current", "true");
+    await expect(rail.getByRole("link", { name: "Intro" })).not.toHaveAttribute("aria-current");
+  });
+
+  test("the header hides while scrolling down and returns on scroll up or keyboard focus", async ({ page }) => {
+    await page.goto("/work/consulting/wabtec-mining/");
+    const header = page.locator("body > header");
+    for (const y of [400, 900, 1400]) await page.evaluate((top) => window.scrollTo(0, top), y);
+    await expect(header).toHaveAttribute("data-hidden", "true");
+
+    await page.evaluate(() => window.scrollTo(0, 1200));
+    await expect(header).toHaveAttribute("data-hidden", "false");
+
+    for (const y of [1700, 2200]) await page.evaluate((top) => window.scrollTo(0, top), y);
+    await expect(header).toHaveAttribute("data-hidden", "true");
+    await page.getByRole("link", { name: "Work", exact: true }).first().focus();
+    await expect(header).toHaveAttribute("data-hidden", "false");
+  });
+
+  test("in-site navigation fades the next page in, direct loads don't", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("main > div").first()).not.toHaveClass(/page-enter/);
+    await page.getByRole("link", { name: "All work" }).first().click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Work");
+    await expect(page.locator("main > div").first()).toHaveClass(/page-enter/);
+  });
+});
+
+test.describe("motion layer with reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("no custom cursor, nothing hidden for a fade-in, labels already readable", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".cursor-layer")).toHaveCount(0);
+    await expect(page.locator("[data-reveal='pending']")).toHaveCount(0);
+    await expect(page.locator("#log .eyebrow").first()).toHaveText("02 // career log");
+  });
+});

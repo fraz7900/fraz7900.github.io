@@ -113,6 +113,7 @@
   }
 
   .glass {
+    position: relative; /* anchors the pointer spotlight; positioning utilities still override */
     background: color-mix(in srgb, var(--color-card) 72%, transparent);
     border: 1px solid var(--color-line);
     backdrop-filter: blur(10px);
@@ -145,8 +146,11 @@
     padding: 0.7rem 1.2rem;
     font-size: 0.9375rem;
     font-weight: 600;
+    /* --mag-x / --mag-y are set by PointerEffects while the pointer is over the button. */
+    translate: var(--mag-x, 0px) var(--mag-y, 0px);
     transition:
       transform 160ms ease,
+      translate 220ms cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 160ms ease,
       border-color 160ms ease;
   }
@@ -202,5 +206,127 @@
   .command-menu::backdrop {
     background: rgb(3 6 12 / 0.55);
     backdrop-filter: blur(6px);
+  }
+}
+
+/*
+ * Motion layer (src/components/motion). Unlayered on purpose: these rules must beat utility
+ * classes such as cursor-pointer. Each effect is switched on by a class or attribute that only
+ * JavaScript adds, so the static HTML always renders plainly.
+ */
+
+/* Custom cursor: dot + trailing ring. The system cursor returns over text fields and dialogs. */
+body.has-cursor:not(:has(dialog[open])),
+body.has-cursor:not(:has(dialog[open])) * {
+  cursor: none;
+}
+
+body.has-cursor :is(input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"]) {
+  cursor: auto;
+}
+
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+body:is(.cursor-hidden, .cursor-native) .cursor-layer,
+body:has(dialog[open]) .cursor-layer {
+  opacity: 0;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 9999px;
+  will-change: translate;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--color-accent);
+  transition: scale 180ms ease;
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+  transition:
+    scale 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 220ms ease,
+    border-color 220ms ease;
+}
+
+body.cursor-hover .cursor-ring {
+  scale: 1.55;
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+body.cursor-hover .cursor-dot {
+  scale: 0.5;
+}
+
+body.cursor-down .cursor-ring {
+  scale: 0.8;
+}
+
+/* Spotlight: a glow on the card border that follows the pointer. */
+.fx-pointer .glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--spot-x, -999px) var(--spot-y, -999px),
+    color-mix(in srgb, var(--color-accent) 80%, transparent),
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+}
+
+.fx-pointer .glass:hover::before {
+  opacity: 1;
+}
+
+/* Fade-in on scroll: only blocks still below the fold are ever hidden. */
+[data-reveal="pending"] {
+  opacity: 0;
+  translate: 0 18px;
+}
+
+[data-reveal="shown"] {
+  transition:
+    opacity 650ms ease,
+    translate 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Page transition: opacity only, so fixed elements inside the page never shift. */
+.page-enter {
+  animation: page-enter 280ms ease-out both;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
   }
 }

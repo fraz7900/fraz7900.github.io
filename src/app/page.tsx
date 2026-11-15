@@ -7,10 +7,20 @@ import { SectionHeading } from "@/components/home/SectionHeading";
 import { StrategyMap } from "@/components/home/strategy-map/StrategyMap";
 import { Ticker } from "@/components/home/Ticker";
 import { TypingLine } from "@/components/home/TypingLine";
+import { DecodeText } from "@/components/motion/DecodeText";
+import { SectionRail } from "@/components/motion/SectionRail";
 import { RoiCalculator } from "@/components/RoiCalculator";
 import { COUNTERS, SITE, STATUS_LOG, TAGLINES, TICKER } from "@/content/site";
 
 const PREVIEW_FIELDS = ["adoptionPercent", "minutesSavedPerCase"] as const;
+
+const SECTIONS = [
+  { id: "intro", label: "Intro" },
+  { id: "about", label: "About" },
+  { id: "log", label: "Career log" },
+  { id: "work", label: "Work" },
+  { id: "side-quest", label: "ROI calculator" },
+] as const;
 
 export default function HomePage() {
   return (
@@ -21,6 +31,7 @@ export default function HomePage() {
       <Log />
       <Work />
       <SideQuest />
+      <SectionRail sections={SECTIONS} />
     </>
   );
 }
@@ -28,6 +39,7 @@ export default function HomePage() {
 function Hero() {
   return (
     <section
+      id="intro"
       aria-labelledby="intro-heading"
       className="page-container grid min-h-[calc(100svh-4rem)] grid-cols-[minmax(0,1fr)] items-center gap-12 py-16 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]"
     >
@@ -59,7 +71,7 @@ function Hero() {
 
 function About() {
   return (
-    <section id="about" aria-labelledby="about-heading" className="page-container scroll-mt-20 py-24">
+    <section id="about" data-reveal="" aria-labelledby="about-heading" className="page-container scroll-mt-20 py-24">
       <SectionHeading index="01" label="about" id="about-heading" title="Hi, I’m Fraz." />
       <div className="grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <div className="prose-body text-ink/90">
@@ -111,7 +123,7 @@ function About() {
 
 function Log() {
   return (
-    <section id="log" aria-labelledby="log-heading" className="page-container scroll-mt-20 py-24">
+    <section id="log" data-reveal="" aria-labelledby="log-heading" className="page-container scroll-mt-20 py-24">
       <SectionHeading index="02" label="career log" id="log-heading" title="Recent milestones" />
       <CareerLog />
     </section>
@@ -120,7 +132,7 @@ function Log() {
 
 function Work() {
   return (
-    <section id="work" aria-labelledby="work-heading" className="page-container scroll-mt-20 py-24">
+    <section id="work" data-reveal="" aria-labelledby="work-heading" className="page-container scroll-mt-20 py-24">
       <SectionHeading index="03" label="work" id="work-heading" title="Product delivery in regulated software" />
       <p className="-mt-4 mb-10 max-w-2xl text-lg leading-relaxed text-muted">
         Integration, evaluation and measurement: the work that decides whether a product actually reaches the people
@@ -146,10 +158,12 @@ function Work() {
 
 function SideQuest() {
   return (
-    <section id="side-quest" aria-labelledby="side-quest-heading" className="page-container scroll-mt-20 py-24">
+    <section id="side-quest" data-reveal="" aria-labelledby="side-quest-heading" className="page-container scroll-mt-20 py-24">
       <div className="glass grid grid-cols-[minmax(0,1fr)] gap-10 rounded-2xl p-5 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <div className="flex flex-col gap-4">
-          <p className="eyebrow">04 // side quest</p>
+          <p className="eyebrow">
+            <DecodeText text="04 // side quest" />
+          </p>
           <h2 id="side-quest-heading" className="font-display text-4xl font-semibold text-ink">
             Workflow <span className="text-gradient">ROI calculator</span>
           </h2>

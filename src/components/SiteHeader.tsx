@@ -1,11 +1,12 @@
 import { SITE } from "@/content/site";
 import { CommandMenu } from "./CommandMenu";
+import { AutoHideHeader } from "./motion/AutoHideHeader";
 import { NavLinks } from "./NavLinks";
 import { TerminalLogo } from "./space/TerminalLogo";
 
 export function SiteHeader() {
   return (
-    <header className="relative z-40 border-b border-line/80 bg-paper/70 backdrop-blur-md sm:sticky sm:top-0">
+    <AutoHideHeader>
       <nav aria-label="Primary" className="page-container flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-3.5">
         <TerminalLogo />
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -18,6 +19,6 @@ export function SiteHeader() {
           <CommandMenu />
         </div>
       </nav>
-    </header>
+    </AutoHideHeader>
   );
 }
