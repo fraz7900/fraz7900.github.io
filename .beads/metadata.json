@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "embedded",
+  "dolt_database": "fraz7900_github_io",
+  "project_id": "4b93ac9f-7400-479c-90fc-1b0d3d602d17"
+}
