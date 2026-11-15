@@ -1,4 +1,7 @@
-/** Dated career log for the homepage. Newest first. `toConfirm` entries are visible placeholders. */
+/**
+ * Dated career log for the homepage. Newest first. `toConfirm` entries are visible placeholders.
+ * Source: Fraz's CV (Assets/Fraz_Ahmed_CV_ADB_YPP.pdf) and the published site work.
+ */
 
 export interface LogEntry {
   readonly date: string;
@@ -25,25 +28,48 @@ export const LOG: readonly LogEntry[] = [
     linkText: "Try it",
   },
   {
-    date: "Date?",
+    date: "2026.05",
+    kind: "Announced",
+    text: "Jamaica’s government announced the digital pension-system design I led with the World Bank, extending coverage to informal workers through auto-enrolment and micro-pensions.",
+  },
+  {
+    date: "2026.01",
+    kind: "Teaching",
+    text: "Teaching assistant for Time Series Forecasting in Python at CMU.",
+  },
+  {
+    date: "2025.12",
+    kind: "Research",
+    text: "Started an independent research project with the World Bank’s LAC Digital Development team on Jamaica’s pension system.",
+  },
+  {
+    date: "Fall 2025",
     kind: "New chapter",
-    text: "Started the MSPPM in Data Analytics at Carnegie Mellon’s Heinz College.",
-    toConfirm: true,
+    text: "Started the MSPPM in Data Analytics at Carnegie Mellon’s Heinz College as a Fulbright Scholar.",
   },
   {
-    date: "Date?",
-    kind: "Public finance",
-    text: "Pension reform work. Add where, when and your role.",
-    toConfirm: true,
+    date: "2025",
+    kind: "Regulation",
+    text: "Drafted the legal framework for Pakistan’s funded defined-contribution pension scheme (S.R.O. 1728(I)/2025).",
   },
   {
-    date: "2021.08",
-    kind: "Milestone",
-    text: "Wrapped 26 months as Product Manager on CareTrak, a platform serving 50+ facilities.",
+    date: "2024",
+    kind: "IMF programme",
+    text: "Co-drafted the pension commitments in the MEFP for the US$7 billion IMF Extended Fund Facility.",
   },
   {
-    date: "2019.06",
+    date: "2023.07",
+    kind: "Valuation",
+    text: "Ran the actuarial revaluation of federal pension liabilities: PKR 12.0 trillion.",
+  },
+  {
+    date: "2022.11",
     kind: "New role",
-    text: "Joined Persivia as Product Manager for CareTrak, its population health and value-based care platform.",
+    text: "Joined Pakistan’s Ministry of Finance as Section Officer (BS-17) in the Regulations Wing.",
+  },
+  {
+    date: "2020.09",
+    kind: "New role",
+    text: "Joined Persivia as Product Manager for CareTrak, its population health and value-based care platform, through October 2022.",
   },
 ];

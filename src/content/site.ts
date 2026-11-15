@@ -26,7 +26,7 @@ export const SITE = {
   /** Set to a path under /public (e.g. "/fraz-ahmed-resume.pdf") once a verified file is supplied. */
   resumeHref: null as string | null,
   /** Set to a path under /public once an approved headshot is supplied. */
-  headshotSrc: null as string | null,
+  headshotSrc: "/images/fraz-ahmed.jpg" as string | null,
   copyrightYear: 2026,
 } as const;
 
@@ -40,31 +40,43 @@ export const TAGLINES = [
 
 /** Scrolling credentials strip under the hero. */
 export const TICKER = [
-  "Product Manager · Persivia, 2019–2021",
+  "Fulbright Scholar · CMU Heinz",
+  "PKR 12.0tn pension revaluation",
+  "IMF EFF pension commitments",
+  "Ministry of Finance, Pakistan · 2022–2025",
+  "World Bank · Jamaica pension design",
+  "Product Manager · Persivia, 2020–2022",
   "CareTrak · 50+ facilities",
   "Clinical NLP evaluation",
   "CMS-HCC risk adjustment",
-  "EHR interoperability",
-  "MSPPM–Data Analytics · CMU Heinz",
-  "Pension reform",
-  "R · Databricks · SQL",
+  "Python · R · SQL · Stata",
 ] as const;
 
 export const STATUS_LOG: readonly { readonly text: string; readonly toConfirm?: boolean }[] = [
-  { text: "Studying applied economics, machine learning and product analytics at CMU Heinz College." },
-  { text: "Previously Product Manager on CareTrak at Persivia, June 2019 – August 2021." },
-  { text: "Open to product strategy and analytics roles in healthcare, enterprise software and consulting." , toConfirm: true },
+  { text: "MSPPM–Data Analytics at Carnegie Mellon’s Heinz College as a Fulbright Scholar, graduating May 2027." },
+  { text: "Teaching assistant for Time Series Forecasting in Python since January 2026." },
+  { text: "Previously Section Officer at Pakistan’s Ministry of Finance (2022–2025), working on pension reform." },
+  { text: "Before that, Product Manager on CareTrak at Persivia (2020–2022)." },
 ];
 
 export const COUNTERS = [
-  { value: 50, suffix: "+", label: "facilities on CareTrak" },
-  { value: 26, suffix: "", label: "months as PM at Persivia" },
+  { value: 12, suffix: "tn", label: "PKR of federal pension liabilities revalued (2023)" },
+  { value: 174, suffix: "k", label: "informal workers in scope of the Jamaica pension design" },
+  { value: 50, suffix: "+", label: "healthcare facilities on CareTrak" },
   { value: 30, suffix: "%", label: "shorter EHR implementation time" },
-  { value: 22, suffix: "%", label: "clinician productivity gain (reported)" },
 ] as const;
 
-/** Add verified profiles here; the footer and command menu pick them up. */
-export const SOCIAL_LINKS: readonly NavItem[] = [];
+/** Verified profiles; the footer and command menu pick them up. */
+export const SOCIAL_LINKS: readonly NavItem[] = [
+  { href: "mailto:frazahmed79@gmail.com", label: "Email", description: "frazahmed79@gmail.com", kind: "link" },
+  {
+    href: "https://www.linkedin.com/in/fraz-ahmed-383396b0/",
+    label: "LinkedIn",
+    description: "linkedin.com/in/fraz-ahmed-383396b0",
+    kind: "link",
+  },
+  { href: "https://github.com/fraz7900", label: "GitHub", description: "github.com/fraz7900", kind: "link" },
+];
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { href: "/work/", label: "Work", description: "Case studies and tools", kind: "go" },

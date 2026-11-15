@@ -16,7 +16,7 @@ import {
 export const metadata: Metadata = {
   title: "CareTrak case study",
   description:
-    "How Fraz Ahmed, as product manager at Persivia, took CareTrak's EHR-integrated clinical AI from integration to production across 50+ facilities.",
+    "How Fraz Ahmed, as product manager at Persivia, took CareTrak's EHR-integrated clinical AI from integration to production on a platform serving 50+ facilities.",
 };
 
 export default function CareTrakPage() {

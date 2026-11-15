@@ -25,8 +25,8 @@ export const PUBLISHED_WORK: readonly WorkEntry[] = [
     title: "CareTrak: clinical AI from integration to production",
     kind: "Case study · Healthcare SaaS · Persivia",
     decision:
-      "How to bring an EHR-integrated, AI-supported workflow into production across 50+ facilities without letting data readiness, evaluation or performance slip.",
-    role: "Product Manager. Led the operational launch, NLP evaluation criteria and operational analytics.",
+      "How to bring an EHR-integrated, AI-supported workflow into production on a platform serving 50+ facilities without letting data readiness, evaluation or performance slip.",
+    role: "Product Manager, 2020–2022. Led a team of 10 engineers and 3 QA analysts; led the operational launch, NLP evaluation criteria and operational analytics.",
     inspect: "A five-step walkthrough with annotated product mockups, results, trade-offs and lessons.",
     href: "/work/caretrak/",
   },
@@ -43,8 +43,15 @@ export const PUBLISHED_WORK: readonly WorkEntry[] = [
 
 export const IN_PREPARATION: readonly PlannedWork[] = [
   {
-    title: "Pension reform",
+    title: "Pension reform at Pakistan’s Ministry of Finance",
     kind: "Case study · Public finance",
-    decision: "Enterprise strategy for a pension reform effort.",
+    decision:
+      "Moving federal pensions from an unfunded defined-benefit scheme toward a funded defined-contribution scheme: the PKR 12.0 trillion revaluation, the IMF EFF pension commitments and the DC legal framework.",
+  },
+  {
+    title: "Jamaica digital pension-system design",
+    kind: "Research · World Bank",
+    decision:
+      "Extending pension coverage to 174,000 informal workers through digital ID enrolment, data exchange, mobile payments, auto-enrolment and micro-pensions.",
   },
 ];

@@ -22,7 +22,9 @@ export const GRAPH_TYPES: readonly { readonly type: GraphNodeType; readonly labe
 export const GRAPH_NODES: readonly GraphNode[] = [
   { id: "caretrak", label: "CareTrak case study", type: "work", href: "/work/caretrak/" },
   { id: "roi", label: "Workflow ROI calculator", type: "work", href: "/tools/workflow-roi/" },
-  { id: "pension", label: "Pension reform (in preparation)", type: "work" },
+  { id: "pension", label: "Pension reform (MoF)", type: "work" },
+  { id: "jamaica", label: "Jamaica pension design", type: "work" },
+  { id: "pensionfisc", label: "pensionfisc costing toolkit", type: "work" },
 
   { id: "healthcare", label: "Healthcare SaaS", type: "domain" },
   { id: "vbc", label: "Value-based care", type: "domain" },
@@ -40,11 +42,16 @@ export const GRAPH_NODES: readonly GraphNode[] = [
   { id: "ccm", label: "Chronic care management", type: "method" },
   { id: "predictive", label: "Predictive cost models", type: "method" },
   { id: "break-even", label: "Break-even modelling", type: "method" },
+  { id: "actuarial", label: "Actuarial valuation", type: "method" },
+  { id: "fiscal-risk", label: "Fiscal risk analysis", type: "method" },
+  { id: "regulatory", label: "Regulatory drafting", type: "method" },
+  { id: "dpi", label: "Digital public infrastructure", type: "method" },
 
   { id: "r", label: "R / RStudio", type: "tool" },
   { id: "databricks", label: "Databricks", type: "tool" },
   { id: "sql", label: "SQL", type: "tool" },
   { id: "typescript", label: "TypeScript", type: "tool" },
+  { id: "python", label: "Python", type: "tool" },
 ];
 
 export const GRAPH_LINKS: readonly (readonly [string, string])[] = [
@@ -74,5 +81,16 @@ export const GRAPH_LINKS: readonly (readonly [string, string])[] = [
   ["break-even", "ops-analytics"],
   ["pension", "public-finance"],
   ["pension", "enterprise-strategy"],
+  ["pension", "actuarial"],
+  ["pension", "fiscal-risk"],
+  ["pension", "regulatory"],
+  ["jamaica", "public-finance"],
+  ["jamaica", "dpi"],
+  ["jamaica", "product-strategy"],
+  ["jamaica", "fiscal-risk"],
+  ["pensionfisc", "actuarial"],
+  ["pensionfisc", "fiscal-risk"],
+  ["pensionfisc", "python"],
+  ["pensionfisc", "public-finance"],
   ["enterprise-strategy", "product-strategy"],
 ];

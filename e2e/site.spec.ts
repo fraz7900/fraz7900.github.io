@@ -248,8 +248,8 @@ test("homepage tells the story in numbered sections", async ({ page }) => {
   for (const name of ["Hi, I’m Fraz.", "Recent milestones", "Product delivery in regulated software", "Workflow ROI calculator"]) {
     await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
   }
-  await expect(page.locator("#about dd").first()).toHaveText("50+");
-  await expect(page.locator("#log li")).toHaveCount(6);
+  await expect(page.locator("#about dd").first()).toHaveText("12tn");
+  await expect(page.locator("#log li")).toHaveCount(11);
 });
 
 test("strategy map renders, toggles node types and offers a list view", async ({ page }) => {
@@ -290,7 +290,7 @@ test.describe("with reduced motion", () => {
     await page.waitForTimeout(2500);
 
     await expect(page.locator("h1 + p [aria-hidden] span").nth(1)).toHaveText("deciding what to build");
-    await expect(page.locator("#about dd").first()).toHaveText("50+");
+    await expect(page.locator("#about dd").first()).toHaveText("12tn");
     expect(errors).toEqual([]);
   });
 });

@@ -17,7 +17,7 @@ export function FoundationMap() {
         </ul>
       </Layer>
       <Arrow label="supported by" />
-      <Layer label="CareTrak foundation, 2019–2021">
+      <Layer label="CareTrak foundation, 2020–2022">
         <ul className="grid gap-2 rounded-md bg-ink p-2.5 sm:grid-cols-5">
           {foundation.map((item) => (
             <li key={item} className="rounded bg-paper/10 px-3 py-2.5 text-sm font-medium text-paper">

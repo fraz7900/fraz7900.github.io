@@ -65,9 +65,10 @@ function About() {
         <div className="prose-body text-ink/90">
           <p>{SITE.supportingCopy}</p>
           <p>
-            At Persivia I was Product Manager on CareTrak, a population health and value-based care platform. I led
-            its operational launch, contributed evaluation criteria for clinical NLP, and built the operations
-            analytics that tracked quality, uptime and adoption.{" "}
+            At Pakistan’s Ministry of Finance I worked on pension reform: the PKR 12.0 trillion revaluation of
+            federal pension liabilities, the pension commitments under the IMF Extended Fund Facility, and the legal
+            framework for a funded defined-contribution scheme. Before that, at Persivia, I was Product Manager on
+            CareTrak, leading the operational launch of an EHR-integrated clinical AI workflow.{" "}
             <Link href="/about/" className="link-accent">
               More about me
             </Link>

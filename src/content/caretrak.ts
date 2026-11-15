@@ -26,7 +26,8 @@ export interface WalkthroughStep {
 export const CASE_FILE = [
   { term: "Role", detail: "Product Manager, CareTrak population health and value-based care platform" },
   { term: "Company", detail: "Persivia" },
-  { term: "Dates", detail: "June 2019 – August 2021" },
+  { term: "Dates", detail: "September 2020 – October 2022" },
+  { term: "Team", detail: "Led 10 software engineers and 3 quality assurance analysts" },
   { term: "Worked with", detail: "Data Engineering, Statistics and Clinical teams" },
   { term: "Tools", detail: "R and RStudio Workbench, Databricks, SQL" },
 ] as const;
@@ -47,7 +48,7 @@ export const STEPS: readonly WalkthroughStep[] = [
     title: "Connect the data",
     summary: "API-first interoperability brought EHR data from 50+ health systems into CareTrak.",
     myWork: [
-      "Led an API-first approach to connecting electronic health records into CareTrak, creating integrated data pipelines for payers and providers.",
+      "Led a team of 10 software engineers and 3 QA analysts to close EHR interoperability gaps with an API-first architecture across 50+ health systems, creating integrated data pipelines for payers and providers.",
       "Implementation time fell by a reported 30%.",
     ],
     whyItMatters:

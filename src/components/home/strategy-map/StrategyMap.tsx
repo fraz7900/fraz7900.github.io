@@ -26,7 +26,7 @@ interface Drag {
   readonly moved: boolean;
 }
 
-const heightFor = (width: number) => (width < 640 ? 420 : 470);
+const heightFor = (width: number) => (width < 640 ? 480 : 560);
 const fitInside = (layout: readonly LayoutNode[], size: LayoutSize) =>
   layout.map((n) => ({ ...n, x: Math.min(Math.max(n.x, 24), size.width - 24), y: Math.min(Math.max(n.y, 24), size.height - 24) }));
 
