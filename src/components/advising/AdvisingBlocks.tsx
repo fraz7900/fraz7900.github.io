@@ -2,7 +2,8 @@ import Link from "next/link";
 import { SectionLabel } from "@/components/SectionLabel";
 import { BOOKING } from "@/content/advising/config";
 import type { FaqItem } from "@/content/advising/faq";
-import type { AdvisingService, ServiceId } from "@/content/advising/services";
+import type { FocusId } from "@/content/advising/bookingFocus";
+import type { AdvisingService } from "@/content/advising/services";
 
 /** Server-side building blocks shared by the advising pages. */
 
@@ -49,7 +50,7 @@ export function priceText(): string {
 }
 
 /** Contextual booking link. Carries only the service id, never a visitor's answers. */
-export function BookingCta({ service, label = "Book a conversation" }: { service?: ServiceId; label?: string }) {
+export function BookingCta({ service, label = "Book a conversation" }: { service?: FocusId; label?: string }) {
   const href = service ? `/advising/book/?topic=${service}` : "/advising/book/";
   return (
     <span className="flex flex-col gap-1.5">

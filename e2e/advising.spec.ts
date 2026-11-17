@@ -10,8 +10,22 @@ const ROUTES = [
   ["/advising/stories/", /stories/i],
   ["/advising/updates/", /updates/i],
   ["/advising/updates/chevening-2027-28-applications-closed/", /Chevening 2027–28/],
-  ["/advising/book/", /Book a conversation/],
+  ["/advising/book/", /A conversation\. A clearer next step\./],
 ] as const;
+
+const BOOKING_URL = "https://calendar.app.google/bvLSH73fMxBTyPsx8";
+const EMBED_URL =
+  "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0sZlEKmrmLWtAVbbtzMrKPdD2xTpDZgFGd2NR9JJkPNygYkEuwlWUFyfbn6h7W_Ps6b72f4sip?gv=true";
+
+// Google's calendar is replaced by a small accessible stand-in, so tests never depend on Google being reachable.
+test.beforeEach(async ({ page }) => {
+  await page.route("https://calendar.google.com/**", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: '<!doctype html><html lang="en"><head><title>Booking calendar (test stand-in)</title></head><body><main><p>Calendar stand-in</p></main></body></html>',
+    }),
+  );
+});
 
 async function expectCleanPage(page: Page) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -165,16 +179,88 @@ test("a verified deadline stops offering a calendar file once the visitor's cloc
   await expect(page.getByRole("button", { name: /Add deadline to calendar/ })).toHaveCount(0);
 });
 
-test("booking falls back to verified email while no provider is configured", async ({ page }) => {
-  await page.goto("/advising/book/?topic=career");
-  await expect(page.getByRole("radio", { name: "Career guidance" })).toBeChecked();
-  await expect(page.getByText("Online booking isn’t open yet.")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Email me to arrange a time" })).toHaveAttribute(
-    "href",
-    "mailto:frazahmed79@gmail.com?subject=Advising%20conversation",
-  );
+test("booking uses the real Google booking page: direct link always, calendar once a focus is chosen", async ({ page }) => {
+  await page.goto("/advising/book/");
+  await expect(page.getByRole("link", { name: /Open the booking page/ })).toHaveAttribute("href", BOOKING_URL);
   await expect(page.locator("iframe")).toHaveCount(0);
-  await expect(page.getByText(/currently free · 30 minutes/).first()).toBeVisible();
+  await expect(page.getByText("Choose a focus to open the calendar here")).toBeVisible();
+
+  await chooseFocus(page, "Career advising");
+  await expect(page.locator("iframe")).toHaveAttribute("src", EMBED_URL);
+  await expect(page.getByRole("status").filter({ hasText: /Loading/ })).toHaveCount(0);
+  await expect(page.getByText("In the booking form, enter your focus:")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy focus name: Career advising" })).toBeVisible();
+  await expect(page.getByText("Calendar not showing?")).toBeVisible();
+  await expect(page.getByText("Currently free", { exact: true })).toBeVisible();
+  await expect(page.getByText("One-to-one video call (Google Meet)")).toBeVisible();
+  const progress = page.getByRole("list", { name: "Booking progress" });
+  await expect(progress.locator('[aria-current="step"]')).toContainText("Pick time");
+  await expect(progress.getByText("(done)")).toHaveCount(1);
+});
+
+/** Clicks a focus card (the label wrapping its radio), as a visitor would. */
+async function chooseFocus(page: Page, name: string) {
+  await page.locator("label", { has: page.getByRole("radio", { name }) }).click();
+}
+
+test("choosing a focus updates the session details and progress without reloading", async ({ page }) => {
+  await page.goto("/advising/book/");
+  const progress = page.getByRole("list", { name: "Booking progress" });
+  await expect(progress.locator('[aria-current="step"]')).toContainText("Choose focus");
+  await expect(page.getByRole("heading", { level: 2, name: "Your session" })).toBeVisible();
+  await page.evaluate(() => ((window as unknown as { __marker: boolean }).__marker = true));
+
+  await chooseFocus(page, "Scholarship guidance");
+  await expect(page.getByRole("radio", { name: "Scholarship guidance" })).toBeChecked();
+  await expect(page.getByRole("heading", { level: 2, name: "Scholarship guidance" })).toBeVisible();
+  await expect(progress.locator('[aria-current="step"]')).toContainText("Pick time");
+  await expect(page).toHaveURL(/\/advising\/book\/\?topic=scholarships$/);
+  expect(await page.evaluate(() => (window as unknown as { __marker?: boolean }).__marker)).toBe(true);
+
+  await page.getByText("What should I prepare?").click();
+  await expect(page.getByText("Scholarships you’re considering and their deadlines")).toBeVisible();
+  await expectCleanPage(page);
+});
+
+test("a focus chosen on the booking page survives going to a guide and back", async ({ page }) => {
+  await page.goto("/advising/book/");
+  await chooseFocus(page, "Admissions support");
+  await page.getByText("What should I prepare?").click();
+  await page.getByRole("link", { name: "Check your application readiness" }).click();
+  await expect(page).toHaveURL(/\/advising\/admissions\/$/);
+  await page.goBack();
+  await expect(page.getByRole("radio", { name: "Admissions support" })).toBeChecked();
+  await expect(page.getByRole("heading", { level: 2, name: "Admissions support" })).toBeVisible();
+});
+
+test("the URL decides the selection, even when moving between topics without a reload", async ({ page }) => {
+  await page.goto("/advising/book/?topic=career");
+  await expect(page.getByRole("radio", { name: "Career advising" })).toBeChecked();
+  await page.getByRole("navigation", { name: "Advising" }).getByRole("link", { name: "book", exact: true }).click();
+  await expect(page).toHaveURL(/\/advising\/book\/$/);
+  await expect(page.getByRole("radio", { checked: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 2, name: "Your session" })).toBeVisible();
+  await page.goBack();
+  await expect(page.getByRole("radio", { name: "Career advising" })).toBeChecked();
+});
+
+test("focus cards can be chosen with the keyboard", async ({ page }) => {
+  await page.goto("/advising/book/?topic=career");
+  await page.getByRole("radio", { name: "Career advising" }).focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(page.getByRole("radio", { name: "Test preparation" })).toBeChecked();
+  await expect(page).toHaveURL(/topic=test-prep$/);
+  await expect(page.getByRole("heading", { level: 2, name: "Test preparation" })).toBeVisible();
+});
+
+test("links from other pages preselect their focus, and unknown topics select nothing", async ({ page }) => {
+  await page.goto("/advising/scholarships/");
+  await page.getByRole("link", { name: "Plan a scholarship application" }).click();
+  await expect(page.getByRole("radio", { name: "Scholarship guidance" })).toBeChecked();
+
+  await page.goto("/advising/book/?topic=astrology");
+  await expect(page.getByRole("radio", { checked: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 2, name: "Your session" })).toBeVisible();
 });
 
 test("stories show an honest empty state and no fabricated story pages", async ({ page }) => {

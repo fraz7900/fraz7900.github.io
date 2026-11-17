@@ -34,6 +34,8 @@ export interface BookingConfig {
   readonly sessionMinutes: number;
   readonly format: string;
   readonly pricing: Pricing;
+  /** Shown under the session details, e.g. how sessions are recorded. null to show nothing. */
+  readonly sessionNote: string | null;
   /** Shown whenever online booking is unavailable. Must be a verified contact route. */
   readonly fallback: { readonly label: string; readonly href: string };
 }
@@ -42,13 +44,14 @@ const EMAIL = SOCIAL_LINKS.find((link) => link.href.startsWith("mailto:"));
 if (!EMAIL) throw new Error("advising/config: a verified email link is required in SOCIAL_LINKS for the booking fallback");
 
 export const BOOKING: BookingConfig = {
-  enabled: false,
-  provider: null,
-  bookingUrl: null,
-  embedUrl: null,
+  enabled: true,
+  provider: "google-calendar",
+  bookingUrl: "https://calendar.app.google/bvLSH73fMxBTyPsx8",
+  embedUrl: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ0sZlEKmrmLWtAVbbtzMrKPdD2xTpDZgFGd2NR9JJkPNygYkEuwlWUFyfbn6h7W_Ps6b72f4sip?gv=true",
   topicParam: null,
   sessionMinutes: 30,
-  format: "One-to-one video call",
+  format: "One-to-one video call (Google Meet)",
   pricing: { mode: "free" },
+  sessionNote: "Sessions are recorded and summarised with Gemini notes so I can follow up accurately. You’ll be asked for consent before we begin.",
   fallback: { label: "Email me to arrange a time", href: `${EMAIL.href}?subject=Advising%20conversation` },
 };

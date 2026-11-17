@@ -23,7 +23,7 @@ export default function ScholarshipsPage() {
         title="Scholarship guides"
         lede="Starting points for three major programmes, each linked to its official source. Requirements differ by country, so every guide states its scope."
       >
-        <BookingCta service="admissions" label="Plan a scholarship application" />
+        <BookingCta service="scholarships" label="Plan a scholarship application" />
       </PageIntro>
 
       <section aria-label="How to read this section" className="grid grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-2 lg:grid-cols-4">

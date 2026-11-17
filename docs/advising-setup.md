@@ -19,7 +19,11 @@ without a time zone fails the build with a readable message.
 ## Current state
 
 - **Online booking is off** (`BOOKING.enabled = false`). `/advising/book/` shows an email fallback
-  (`mailto:frazahmed79@gmail.com?subject=Advising conversation`). No placeholder links and no fake availability are published.
+  (`mailto:frazahmed79@gmail.com?subject=Advising conversation: <focus>`). No placeholder links and no fake availability are published.
+- **The booking page is a guided two-column flow.** On the left, visitors choose one of four focuses (`src/content/advising/bookingFocus.ts`).
+  On the right, they see the session details and pick a time. Links such as `/advising/book/?topic=scholarships` preselect a focus, and the choice
+  stays in the URL, so the Back button restores it. The progress indicator never shows "confirmed": only the provider's
+  confirmation (or your email reply) confirms a booking.
 - **Introductory sessions are free and 30 minutes long** (`BOOKING.pricing`, `BOOKING.sessionMinutes`). Every page reads these values.
 - **No tests are confirmed.** The test-prep page offers general planning only. GRE, GMAT, IELTS and TOEFL appear only under `next dev`.
 - **No stories are published.** The stories page shows an honest empty state (see "Stories" for the build detail).
@@ -32,7 +36,9 @@ Official help: <https://support.google.com/calendar/answer/10729749>
 
 1. On a computer, open Google Calendar. Schedules can't be created in the mobile apps.
 2. Click **Create → Appointment schedule**.
-3. Set up an introductory session. Suggested settings:
+3. Set up an introductory session. The settings agreed on 16 November 2026 (weekends 9:00–11:30 am ET, 10 slots a week, and the
+   description line `Ref: ADV-INTRO` that the email automation relies on) are kept with the email automation's setup notes, which
+   take precedence over the general suggestions below:
    - **Duration:** 30 minutes. Keep `BOOKING.sessionMinutes` in sync.
    - **Availability:** your own real hours. Don't copy anyone's suggestion.
    - **Scheduling window:** minimum notice 24 hours, maximum 30 days ahead.
@@ -40,7 +46,7 @@ Official help: <https://support.google.com/calendar/answer/10729749>
    - **Maximum bookings per day:** a number you can manage, for example 2.
    - **Calendars checked for conflicts:** your main calendar. This blocks busy times without showing their details to anyone.
    - **Location:** Google Meet video conferencing, if your account offers it.
-   - **Booking form:** keep first name, last name and email (required by Google). Add a required question **"Topic"** with three options: Career guidance, Admissions support, Test preparation planning. Add an optional question: **"Anything you'd like me to know (one or two lines)"**.
+   - **Booking form:** keep first name, last name and email (required by Google). Add a required item **"What would you like to discuss? (career, test prep, admissions or scholarships)"**. Visitors see their chosen focus on this site with a copy button to paste into it.
    - **Email verification:** turn on if spam becomes a problem.
    - **Confirmations and reminders:** turn on. You can't edit the reminder text.
 4. In the booking page description, state the cancellation and rescheduling process. For example: "Use the link in your confirmation email to reschedule or cancel at least 12 hours ahead."
@@ -62,6 +68,7 @@ export const BOOKING: BookingConfig = {
   sessionMinutes: 30,
   format: "One-to-one video call (Google Meet)",
   pricing: { mode: "free" },
+  sessionNote: "Sessions are recorded…", // shown under the session details; null to hide
   fallback: { … },           // keep as is
 };
 ```

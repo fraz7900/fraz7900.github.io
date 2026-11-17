@@ -4,7 +4,7 @@ import { BOOKING } from "@/content/advising/config";
 import { PUBLISHED_STORIES, validateStory, type Story } from "@/content/advising/stories";
 import { SERVICES } from "@/content/advising/services";
 import { GENERAL_TEST, offeredTests } from "@/content/advising/tests";
-import { bookingHref, bookingState } from "./booking";
+import { bookingHref, bookingState, embedSrc } from "./booking";
 import { DECISIONS, STAGES, USEFUL, reflect, reflectionSummary } from "./careerReflection";
 import { ALL_ITEM_IDS, parseStored, progressOf } from "./readiness";
 import { FINDER_OPTIONS, findService } from "./serviceFinder";
@@ -113,10 +113,13 @@ describe("booking boundary", () => {
     embedUrl: "https://calendar.google.com/calendar/appointments/schedules/XYZ?gv=true",
   };
 
-  test("the shipped config is disabled and falls back to a verified email", () => {
-    expect(bookingState(BOOKING).kind).toBe("disabled");
-    expect(bookingHref(BOOKING)).toBeNull();
+  test("the shipped config is the real Google booking page, with a verified email fallback", () => {
+    expect(bookingState(BOOKING)).toEqual({ kind: "ready", bookingUrl: BOOKING.bookingUrl, embedUrl: BOOKING.embedUrl });
+    expect(BOOKING.provider).toBe("google-calendar");
+    expect(bookingHref(BOOKING, "Career advising")).toBe(BOOKING.bookingUrl);
+    expect(embedSrc(BOOKING)).toBe(BOOKING.embedUrl);
     expect(BOOKING.fallback.href.startsWith("mailto:")).toBe(true);
+    expect(bookingState({ ...BOOKING, enabled: false }).kind).toBe("disabled");
   });
 
   test("a provider URL is accepted; anything else is misconfigured", () => {
@@ -126,11 +129,29 @@ describe("booking boundary", () => {
     expect(bookingState({ ...ready, provider: null }).kind).toBe("misconfigured");
   });
 
+  test("placeholder or incomplete links copied from the setup guide fall back to email", () => {
+    expect(bookingState({ ...ready, bookingUrl: "https://calendar.app.google/…" }).kind).toBe("misconfigured");
+    expect(bookingState({ ...ready, bookingUrl: "https://calendar.app.google/" }).kind).toBe("misconfigured");
+    expect(bookingState({ ...ready, bookingUrl: "https://calendar.app.google/..." }).kind).toBe("misconfigured");
+    expect(bookingState({ ...ready, embedUrl: "https://calendar.google.com/calendar/appointments/schedules/…" }).kind).toBe("misconfigured");
+    expect(bookingState({ ...ready, embedUrl: "https://calendar.google.com/calendar/appointments/schedules/YOUR_ID" }).kind).toBe("misconfigured");
+  });
+
+  test("a Google short link is fine to share but can't be the embed", () => {
+    expect(bookingState({ ...ready, embedUrl: "https://calendar.app.google/abc123" }).kind).toBe("misconfigured");
+    expect(embedSrc(ready)).toBe(ready.embedUrl);
+    expect(embedSrc({ ...ready, embedUrl: null })).toBeNull();
+    expect(embedSrc({ ...BOOKING, enabled: false })).toBeNull();
+  });
+
   test("topics are passed only through Calendly's documented parameter", () => {
     expect(bookingHref(ready, "Career guidance")).toBe(ready.bookingUrl);
     expect(bookingState({ ...ready, topicParam: "a1" }).kind).toBe("misconfigured");
     const calendly: BookingConfig = { ...ready, provider: "calendly", bookingUrl: "https://calendly.com/fraz/intro", embedUrl: null, topicParam: "a1" };
     expect(bookingHref(calendly, "Career guidance")).toBe("https://calendly.com/fraz/intro?a1=Career+guidance");
+    const embedded: BookingConfig = { ...calendly, embedUrl: "https://calendly.com/fraz/intro?embed_type=Inline" };
+    expect(embedSrc(embedded, "Career guidance")).toBe("https://calendly.com/fraz/intro?embed_type=Inline&a1=Career+guidance");
+    expect(embedSrc(ready, "Career guidance")).toBe(ready.embedUrl);
   });
 });
 
