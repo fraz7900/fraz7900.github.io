@@ -1,17 +1,9 @@
 "use client";
 
-import { useEffect, useId, useRef, useSyncExternalStore, type CSSProperties, type ReactNode } from "react";
-import { useMotionPreferences } from "@/components/motion/useMotionPreferences";
+import { useEffect, useId, useRef, type CSSProperties, type ReactNode } from "react";
+import { useHydrated, useMotionPreferences } from "@/components/motion/useMotionPreferences";
 import { attachTilt } from "./tiltController";
 
-const noSubscription = () => () => {};
-/** True once hydrated: the static HTML never claims an interactivity that needs JavaScript. */
-const useHydrated = () =>
-  useSyncExternalStore(
-    noSubscription,
-    () => true,
-    () => false,
-  );
 
 /**
  * The 3D stage for the vector portrait. attachTilt (tiltController.ts) turns the whole picture in

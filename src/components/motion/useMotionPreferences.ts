@@ -18,6 +18,12 @@ const subscribeReducedMotion = subscribeTo(REDUCED_MOTION);
 const finePointerNow = () => window.matchMedia(FINE_POINTER).matches;
 const reducedMotionNow = () => window.matchMedia(REDUCED_MOTION).matches;
 const offOnServer = () => false;
+const noSubscription = () => () => {};
+
+/** True once hydrated: the static HTML never claims an interactivity that needs JavaScript. */
+export function useHydrated() {
+  return useSyncExternalStore(noSubscription, () => true, offOnServer);
+}
 
 /**
  * Live pointer and motion preferences. Both read false in the static HTML, so effects only

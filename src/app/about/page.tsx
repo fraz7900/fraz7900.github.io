@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { DecisionWorkbench } from "@/components/about/workbench/DecisionWorkbench";
 import { SectionLabel } from "@/components/SectionLabel";
 import { SITE, SOCIAL_LINKS } from "@/content/site";
 
@@ -20,8 +21,8 @@ const QUICK_FACTS = [
 
 export default function AboutPage() {
   return (
-    <div className="page-container grid grid-cols-[minmax(0,1fr)] gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-16">
-      <div className="flex flex-col gap-10">
+    <div className="page-container grid grid-cols-[minmax(0,1fr)] gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-x-16 lg:gap-y-16">
+      <div className="flex flex-col gap-10 lg:col-start-1 lg:row-start-1">
         <header className="flex max-w-2xl flex-col gap-5">
           <SectionLabel>about</SectionLabel>
           <h1 className="font-display text-5xl font-semibold tracking-tight text-ink sm:text-6xl">
@@ -38,6 +39,28 @@ export default function AboutPage() {
             I work on the questions that come before and after a build: what a team should make, how it will know the
             work is succeeding, and how to roll it out to the people who have to use it.
           </p>
+        </div>
+
+        {/* Heads the workbench below; it sits here so it fills the space beside the quick facts on wide screens. */}
+        <div className="mt-6 flex max-w-2xl flex-col gap-4">
+          <SectionLabel>workbench</SectionLabel>
+          <h2 id="workbench-title" className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+            Different settings. A consistent approach.
+          </h2>
+          <p className="text-lg leading-relaxed text-muted">
+            I work across different settings, using evidence to turn complex questions into decisions and practical next
+            steps.
+          </p>
+          <p className="text-sm text-faint">Explore the objects to see how I work.</p>
+        </div>
+      </div>
+
+      <section aria-labelledby="workbench-title" className="lg:col-span-2 lg:row-start-2">
+        <DecisionWorkbench />
+      </section>
+
+      <div className="lg:col-start-1 lg:row-start-3">
+        <div className="prose-body text-ink/90">
           <p>
             <strong className="font-semibold text-ink">Public finance.</strong> From 2022 to 2025 I was a Section
             Officer in the Regulations Wing of Pakistan’s Ministry of Finance. I ran the actuarial revaluation of
@@ -80,7 +103,7 @@ export default function AboutPage() {
         </div>
       </div>
 
-      <aside aria-label="Quick facts" className="flex flex-col gap-6 lg:sticky lg:top-24 lg:self-start">
+      <aside aria-label="Quick facts" className="flex flex-col gap-6 lg:col-start-2 lg:row-start-1 lg:self-start">
         {SITE.headshotSrc && (
           <div className="relative mx-auto aspect-square w-56 rounded-full bg-[conic-gradient(from_200deg,var(--color-accent),var(--color-sky),var(--color-amber),var(--color-accent))] p-[3px] lg:mx-0">
             <Image
